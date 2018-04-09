@@ -1,0 +1,152 @@
+package com.zm.provider;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
+import com.zm.provider.dao.BookEntityDao;
+import com.zm.provider.dao.PayEntityDao;
+import com.zm.provider.entity.Book;
+import com.zm.provider.entity.Pay;
+import com.zm.provider.mq.NeoSender;
+
+@RestController
+public class HelloController {
+    
+	private final Logger logger = Logger.getLogger(HelloController.class);
+    
+	@Autowired
+	private BookEntityDao bookEntityDao;
+	
+	@Autowired
+	private PayEntityDao payEntityDao;
+	
+    @Autowired
+    private DiscoveryClient client;
+    
+    @Autowired
+    private NeoSender neoSender;
+
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
+    public String hello() {
+        List<ServiceInstance> instances = client.getInstances("hello-service");
+        for (int i = 0; i < instances.size(); i++) {
+            logger.info("/hello,host:" + instances.get(i).getHost() + ",service_id:" + instances.get(i).getServiceId());
+        }
+        return "Hello World";
+    }
+   
+    @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
+    public String sayHello(String name) {
+    	return "您好"+name;
+    }
+    
+    @RequestMapping(value = "/sayNameAndAge", method = RequestMethod.GET)
+    public String sayNameAndAge(String name,String age) {
+    	logger.info("----- HelloController sayNameAndAge 进入 name= "+name + "age="+ age);
+    	return "您好"+name + "您今年"+age +"岁了!";
+    }
+    
+    @RequestMapping(value = "/sayNameAndAge2", method = RequestMethod.POST)
+    public String sayNameAndAge2(@RequestBody Map<String, String> map) {
+    	logger.info("----- HelloController sayNameAndAge2 进入");
+    	return "您好"+map.get("name") + "您今年"+map.get("age") +"岁了!";
+    }
+    
+    @RequestMapping(value = "/sayBook", method = RequestMethod.GET)
+    public Book sayBook() {
+    	logger.info("----- HelloController sayBook");
+        return new Book("三国演义", 90, new Date());
+    }
+    
+    @RequestMapping(value = "/getBook", method = RequestMethod.GET)
+    public Book getBook(@RequestBody Book book) {
+    	logger.info("----- HelloController getBook, book=" + JSONObject.toJSONString(book));
+    	book.setName("哈哈你过来了");
+        return book;
+    }
+    
+    @RequestMapping(value = "/getBook2")
+    public Book getBook2(@RequestBody Book book) {
+    	logger.info("----- HelloController getBook2, book=" + JSONObject.toJSONString(book));
+    	book.setName("说谎");
+        return book;
+    }
+    
+    @RequestMapping(value = "/getBookForObject")
+    public Book getBookForObject(@RequestBody Book book,@RequestBody Pay pay) {
+    	logger.info("----- HelloController getBookForObject, book=" + JSONObject.toJSONString(book));
+    	logger.info("----- HelloController getBookForObject, pay=" + JSONObject.toJSONString(pay));
+    	book.setName("说谎");
+    	pay.setName("gg");
+        return book;
+    }
+    
+    /**
+     * 测试提供者的mybatis整合
+     * @param id
+     * @return
+     */
+    @RequestMapping(value="mybatatisgetBook")
+    public Book mybatatisgetBook(Long id) {
+    	logger.info("----- HelloController mybatatisgetBook,id= "+id);
+    	Book book = bookEntityDao.getBook(id);
+    	logger.info("----- HelloController mybatatisgetBook,book= "+ JSONObject.toJSONString(book));
+        return book;
+    }
+    
+    /**
+     * 测试事务
+     * @param name
+     * @return
+     */
+    @Transactional
+    @RequestMapping(value="testTransaction")
+    public String testTransaction() {
+    	logger.info("----- HelloController testTransaction");
+    	Pay pay = new Pay(1, "zm", 2, new Date());
+    	Book book = new Book(1, "zm", 2, new Date());
+    	try {
+    		payEntityDao.insertPay(pay);
+        	bookEntityDao.insertBook(book);
+		} catch (Exception e) {
+			logger.info("----- HelloController catch exception " + e);
+			return "no";
+		}
+    	return "yes";
+    }
+    
+    @RequestMapping(value="testZzul")
+    public String testZzul(String param) {
+    	try {
+	    	int paramInt = Integer.parseInt(param);
+	    	int num = 100 / paramInt;
+    	} catch (Exception e) {
+    		logger.info("testZzul provider has exception " + e);
+    		throw e;
+    	}
+    	return "ok";
+    }
+    
+    /**
+     * 测试整合mq收发消息
+     */
+    @RequestMapping(value="testMQ")
+    public void testMQ() {
+    	logger.info("---开始准备发送mq消息");
+    	neoSender.send(10);
+    }
+    
+    
+}

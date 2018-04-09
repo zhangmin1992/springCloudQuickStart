@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zm.provider.dao.PayEntityDao" >
+  
+  <resultMap id="BaseResultMap" type="com.zm.provider.entity.Pay" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <id column="PRICE" property="price" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+ 	<insert id="insertPay" parameterType="com.zm.provider.entity.Pay">
+ 		 INSERT INTO
+		 payplus_test.pay_test (name,price,create_time) 
+		 VALUES (#{name,jdbcType=VARCHAR},#{price,jdbcType=VARCHAR},current_timestamp)
+ 	</insert>
+</mapper>
