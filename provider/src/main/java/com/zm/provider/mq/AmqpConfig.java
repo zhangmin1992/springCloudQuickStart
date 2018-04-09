@@ -17,6 +17,11 @@ import org.springframework.stereotype.Component;
 
 import com.zm.provider.ProviderApplication;
 
+/**
+ * mq的绑定关系
+ * @author yp-tc-m-7129
+ *
+ */
 @Component
 public class AmqpConfig {
 
@@ -28,18 +33,22 @@ public class AmqpConfig {
 	@Autowired
 	private RabbitMqExchangeConfig rabbitMqExchangeConfig;
 	
-//	public  void init() {
-//		logger.info("准备初始化绑定关系");
-//		String[] queueArray = rabbitMqExchangeConfig.getQueueList().split(",");
-//		String[] exchangeArray = rabbitMqExchangeConfig.getExchangeList().split(",");
-//		String[] bindArray = rabbitMqExchangeConfig.getBindingList().split(",");
-//		for(int i=0;i<bindArray.length;i++) {
-//			Queue queue = queue(queueArray[i]);
-//			TopicExchange exchange = exchange(exchangeArray[i]);
-//			binding(queue, exchange, bindArray[i]);
-//		}
-//		
-//	}
+	/**
+	 * 尝试使用资源文件的方式一次注入多个同类型的queue,exchange,绑定关系
+	 * @return
+	 */
+	/*public  void init() {
+		logger.info("准备初始化绑定关系");
+		String[] queueArray = rabbitMqExchangeConfig.getQueueList().split(",");
+		String[] exchangeArray = rabbitMqExchangeConfig.getExchangeList().split(",");
+		String[] bindArray = rabbitMqExchangeConfig.getBindingList().split(",");
+		for(int i=0;i<bindArray.length;i++) {
+			Queue queue = queue(queueArray[i]);
+			TopicExchange exchange = exchange(exchangeArray[i]);
+			binding(queue, exchange, bindArray[i]);
+		}
+		
+	}*/
 	
 	@Bean
     public ConnectionFactory connectionFactory(){

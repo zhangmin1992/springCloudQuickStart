@@ -3,6 +3,11 @@ package com.zm.provider.mq;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 尝试加载额外的资源文件
+ * @author yp-tc-m-7129
+ *
+ */
 @Configuration
 @ConfigurationProperties(prefix = "my.rabitmq")
 public class RabbitMqExchangeConfig {

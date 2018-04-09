@@ -29,6 +29,11 @@ public interface HelloFeignClient {
 	@RequestMapping(value = "/getBook2")
 	Book getBook2(@RequestBody Book book);
 	
+	//错误写法
 //	@RequestMapping(value = "/getBookForObject")
 //	Book getBookForObject(@RequestBody Book book,@RequestBody Pay pay);
+	
+	//错误写法
+	@RequestMapping(value = "/getBookForObject2")
+	Book getBookForObject2(@RequestBody Book book,@RequestParam(value ="id") String id);
 }

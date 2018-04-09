@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.Future;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheKey;
@@ -27,9 +28,9 @@ import com.zm.spring.cloud.pptest_consumer.service.HelloService;
 
 @RestController
 /**
- * 表明这个类可以接受http请求，但是不能返回jsp页面
- * @author yp-tc-m-7129
- *
+* @Description:
+* @author zhangmin 
+* @date 2018年4月9日 下午2:36:49
  */
 public class ConsumerController {
 	
@@ -101,7 +102,7 @@ public class ConsumerController {
     
     /**
      * post
-     * 请求的时候传递多个参数
+     * 请求的时候传递多个参数转为map
      * @return
      */
     @RequestMapping("/sayNameAndAge2")
@@ -126,17 +127,28 @@ public class ConsumerController {
     }
     
     /**
-     * Hystrix断路器的短路机制-方法上通过@HystrixCommand注解来指定请求失败时回调的方法,跳转方法不能再用@RequestMapping声明了
+     * Hystrix断路器的短路机制
+     * 方法上通过@HystrixCommand注解来指定请求失败时回调的方法,跳转方法不能再用@RequestMapping声明了
      * 请求失败(异常，拒绝，超时，短路)时执行fallback(降级)逻辑
      * 如果有异常我们需要直接捕获到抛给用户不是跳转到error方法可以加注解ignoreExceptions = ArithmeticException.class
      * @return
      */
-    @HystrixCommand(fallbackMethod = "error",ignoreExceptions = ArithmeticException.class)
-    //@HystrixCommand(fallbackMethod = "error")
-    @RequestMapping("/hello")
-    public String hello() {
-    	logger.info("进入hello方法");
-    	return helloService.hello();
+    //@HystrixCommand(fallbackMethod = "error",ignoreExceptions = ArithmeticException.class)
+    @HystrixCommand(fallbackMethod = "error")
+    @RequestMapping("/testHystrix2")
+    public String testHystrix2(String param) {
+    	logger.info("进入testHystrix2----方法");
+    	return helloService.testZzul(param);
+    }
+    
+    /**
+     * 有异常的回调函数,这个备用方法的参数返回值要和上述方法完全一致
+     * @param throwable
+     * @return
+     */
+    public String error(String param) {
+    	logger.info("发现异常: 请求参数是 " + param);
+        return "服务提供者挂机喽!请联系管理员";
     }
     
     /**
@@ -144,16 +156,18 @@ public class ConsumerController {
      * @return
      * @throws InterruptedException
      * @throws ExecutionException
+     * @throws TimeoutException 
      */
     @HystrixCommand
     @RequestMapping("/testHystrixCommand")
-    public Book testHystrixCommand() throws InterruptedException, ExecutionException {
+    public Book testHystrixCommand() throws InterruptedException, ExecutionException, TimeoutException {
     	logger.info("进入testHystrixCommand方法");
-    	Future<Book> bookFuture = helloService.testHystrixCommand();
-        return bookFuture.get();
-        
-        //在get这里加时间是干什么?
-        //return bookFuture.get(1, TimeUnit.MINUTES);
+//    	Future<Book> bookFuture = helloService.testHystrixCommand();
+//        //return bookFuture.get();
+//        //1分钟没有返回则超时时长
+//        return bookFuture.get(1, TimeUnit.MINUTES);
+    	  Future<Book> bookFuture  = new CommandHelloWorld("World",restTemplate).queue();
+    	  return bookFuture.get();
         
     }
     
@@ -200,16 +214,6 @@ public class ConsumerController {
     public Book testCacheResult3(@CacheKey Integer id) {
     	logger.info("进testCacheResult3--即将删除testCacheResult2的缓存");
         return null;
-    }
-    
-    /**
-     * 有异常的回调函数
-     * @param throwable
-     * @return
-     */
-    public String error(Throwable throwable) {
-    	logger.info("发现异常:" + throwable.getMessage());
-        return "服务提供者挂机喽!请联系管理员";
     }
     
     /**
@@ -277,11 +281,21 @@ public class ConsumerController {
     	return "ok";
     }
     
-//    @RequestMapping("/getBookForObject")
-//    public Book getBookForObject() {
-//    	logger.info("进入ConsumerController testFeign3方法");
-//    	Book book = new Book("mm",11,new Date());
-//    	Pay pay = new Pay("mm", 11, new Date());
-//    	return helloFeignClient.getBookForObject(book, pay);
-//    }
+    /**
+     * 测试传递多个实体参数的问题--
+     * 不支持多个@RequestBody实体参数,这个会报错
+     * 但是支持1一个@RequestBody参数和多个普通类型参数不会报错
+    * @Description: TODO(这里用一句话描述这个方法的作用) 
+    * @param @return
+    * @return Book    返回类型 
+    * @throws
+     */
+    @RequestMapping("/getBookForObject")
+    public Book getBookForObject() {
+    	logger.info("进入ConsumerController testFeign3方法");
+    	Book book = new Book("mm",11,new Date());
+    	Pay pay = new Pay("mm", 11, new Date());
+    	//return helloFeignClient.getBookForObject(book, pay);
+    	return helloFeignClient.getBookForObject2(book, "1");
+    }
 }

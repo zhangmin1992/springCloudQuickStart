@@ -36,6 +36,12 @@
 	        <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
 	        <version>1.4.1.RELEASE</version>
 	    </dependency>
+	    <!-- 不添加这个依赖报错 Unable to connect to Command Metric Stream -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-actuator</artifactId>
+	        <version>1.4.1.RELEASE</version>
+    	</dependency>
 	</dependencies>
 	
 

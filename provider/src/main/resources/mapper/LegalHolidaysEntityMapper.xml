@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zm.provider.dao.LegalHolidaysEntityDao">
+ 
+  <resultMap id="BaseResultMap" type="com.zm.provider.entity.LegalHolidaysEntity">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="HOLIDAY_DATE" jdbcType="DATE" property="holidayDate" />
+  </resultMap>
+  
+  <insert id="insetLegalHolidaysInfo" parameterType="com.zm.provider.entity.LegalHolidaysEntity">
+	   insert into acc_legal_holidays (holiday_date)
+	   values (#{holidayDate,jdbcType=DATE})
+  </insert>
+
+  <select id="getLegalHolidaysInfoByDate" resultMap="BaseResultMap">
+    select * from acc_legal_holidays where holiday_date <![CDATA[ > ]]> #{holidayDate,jdbcType=DATE}
+    order by holiday_date ASC LIMIT 1
+  </select>
+  
+  <select id="getLegalHolidaysInfo" resultMap="BaseResultMap">
+    select * from acc_legal_holidays where holiday_date = #{holidayDate,jdbcType=DATE}
+  </select>
+</mapper>

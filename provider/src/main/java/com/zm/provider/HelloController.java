@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -38,6 +39,10 @@ public class HelloController {
     @Autowired
     private NeoSender neoSender;
 
+    /**
+     * 测试资源文件启动正常
+     * @return
+     */
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String hello() {
         List<ServiceInstance> instances = client.getInstances("hello-service");
@@ -47,29 +52,57 @@ public class HelloController {
         return "Hello World";
     }
    
+    /**
+     * 测试启动正常-单普通参数
+     * @param name
+     * @return
+     */
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
     public String sayHello(String name) {
     	return "您好"+name;
     }
     
+    /**
+     * 多普通参数
+     * @param name
+     * @param age
+     * @return
+     */
     @RequestMapping(value = "/sayNameAndAge", method = RequestMethod.GET)
     public String sayNameAndAge(String name,String age) {
     	logger.info("----- HelloController sayNameAndAge 进入 name= "+name + "age="+ age);
     	return "您好"+name + "您今年"+age +"岁了!";
     }
     
-    @RequestMapping(value = "/sayNameAndAge2", method = RequestMethod.POST)
-    public String sayNameAndAge2(@RequestBody Map<String, String> map) {
-    	logger.info("----- HelloController sayNameAndAge2 进入");
-    	return "您好"+map.get("name") + "您今年"+map.get("age") +"岁了!";
-    }
-    
+    /**
+     * 返回实体
+    * @Description: TODO(这里用一句话描述这个方法的作用) 
+    * @param @return
+    * @return Book    返回类型 
+    * @throws
+     */
     @RequestMapping(value = "/sayBook", method = RequestMethod.GET)
     public Book sayBook() {
     	logger.info("----- HelloController sayBook");
         return new Book("三国演义", 90, new Date());
     }
     
+    /**
+     * 单实体参数
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/sayNameAndAge2", method = RequestMethod.POST)
+    public String sayNameAndAge2(@RequestBody Map<String, String> map) {
+    	logger.info("----- HelloController sayNameAndAge2 进入");
+    	return "您好"+map.get("name") + "您今年"+map.get("age") +"岁了!";
+    }
+   
+    /**
+     * 单实体参数返回实体get方式
+     * @param book
+     * @return
+     */
     @RequestMapping(value = "/getBook", method = RequestMethod.GET)
     public Book getBook(@RequestBody Book book) {
     	logger.info("----- HelloController getBook, book=" + JSONObject.toJSONString(book));
@@ -77,6 +110,11 @@ public class HelloController {
         return book;
     }
     
+    /**
+     * 单实体参数返回实体
+     * @param book
+     * @return
+     */
     @RequestMapping(value = "/getBook2")
     public Book getBook2(@RequestBody Book book) {
     	logger.info("----- HelloController getBook2, book=" + JSONObject.toJSONString(book));
@@ -84,12 +122,25 @@ public class HelloController {
         return book;
     }
     
+    /**
+     * 返回实体多实体参数-------错误写法会报错
+     * @param book
+     * @param pay
+     * @return
+     */
     @RequestMapping(value = "/getBookForObject")
     public Book getBookForObject(@RequestBody Book book,@RequestBody Pay pay) {
     	logger.info("----- HelloController getBookForObject, book=" + JSONObject.toJSONString(book));
     	logger.info("----- HelloController getBookForObject, pay=" + JSONObject.toJSONString(pay));
     	book.setName("说谎");
     	pay.setName("gg");
+        return book;
+    }
+    
+    @RequestMapping(value = "/getBookForObject2")
+    public Book getBookForObject2(@RequestBody Book book,@RequestParam(value ="id") String id) {
+    	logger.info("----- HelloController getBookForObject,id= "+ id +" book=" + JSONObject.toJSONString(book));
+    	book.setName("说谎");
         return book;
     }
     
@@ -127,9 +178,15 @@ public class HelloController {
     	return "yes";
     }
     
+    /**
+     * 测试网关和断路器是否每次都会请求到这里
+     * @param param
+     * @return
+     */
     @RequestMapping(value="testZzul")
     public String testZzul(String param) {
     	try {
+    		logger.info("我进入了服务提供者。。。。");
 	    	int paramInt = Integer.parseInt(param);
 	    	int num = 100 / paramInt;
     	} catch (Exception e) {
@@ -145,7 +202,7 @@ public class HelloController {
     @RequestMapping(value="testMQ")
     public void testMQ() {
     	logger.info("---开始准备发送mq消息");
-    	neoSender.send(10);
+    	neoSender.send("2018-01-01");
     }
     
     

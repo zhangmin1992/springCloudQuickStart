@@ -11,7 +11,7 @@ java -jar eureka-server-0.0.1-SNAPSHOT.jar --spring.profiles.active=peer2
 java -jar eureka-server-0.0.1-SNAPSHOT.jar --spring.profiles.active=peer3
 
 服务提供者端口号和地址
-http://localhost:8080/hello,端口号有:
+http://localhost:8081/hello,端口号有:
 8082      注册在 8012注册中心上 对应application-peer2.properties
 8083      注册在 8013注册中心上 对应对应application-peer3.properties
 8081      注册在8011注册中心上 对应application.properties
