@@ -96,6 +96,16 @@
             <artifactId>spring-boot-starter-data-cassandra</artifactId>
         </dependency> -->
         
+        <!-- 整合redis部分 -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>  
+            <groupId>redis.clients</groupId>  
+            <artifactId>jedis</artifactId>  
+        </dependency>  
+        
     </dependencies>
     
     <dependencyManagement>

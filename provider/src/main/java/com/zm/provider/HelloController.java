@@ -21,6 +21,8 @@ import com.zm.provider.dao.PayEntityDao;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Pay;
 import com.zm.provider.mq.NeoSender;
+import com.zm.provider.redis.RedisUtils;
+import com.zm.provider.util.redis.RedisDistributeLock;
 
 @RestController
 public class HelloController {
@@ -38,6 +40,9 @@ public class HelloController {
     
     @Autowired
     private NeoSender neoSender;
+    
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 测试资源文件启动正常
@@ -203,6 +208,69 @@ public class HelloController {
     public void testMQ() {
     	logger.info("---开始准备发送mq消息");
     	neoSender.send("2018-01-01");
+    }
+    
+    /**
+     * 测试redis整合，spring自带的redis处理方式
+     * 缺点需要注入没法公有化
+     */
+    /*@RequestMapping(value="testRedisLock")
+    public void testRedisLock() {
+    	logger.info("---开始测试分布式锁");
+    	redisUtils.set("mykey", "myvalue");
+    	Object result = (String) redisUtils.get("mykey");
+    	logger.info("------"+ result);
+    }*/
+    
+    /**
+     * 测试redis整合，工具类方式
+     */
+    /*@RequestMapping(value="testRedisLock")
+    public void testRedisLock() {
+    	logger.info("---开始测试分布式锁");
+    	RedisToolUtils.set("cc", "vv");
+    	}*/
+    
+    /**
+     * 测试分布式锁
+     */
+	 @RequestMapping(value="testRedisLock")
+	    public void testRedisLock() {
+	    	logger.info("---开始测试分布式锁");
+	    	new Thread(new Runnable() {
+				@Override
+				public void run() {
+					for(int i=0;i<10;i++) {
+			    		String key = RedisDistributeLock.getLockKey(HelloController.class,"key",String.valueOf(i),"");
+			    		if (RedisDistributeLock.tryLock(key)) {
+			    			logger.info("获取到锁 key"+key);
+			    			try {
+								
+							} catch (Exception e) {
+								// TODO: handle exception
+							} finally {
+								 RedisDistributeLock.unlock(key);
+							}
+			    		}
+			    	}
+					
+				}
+			}).start();
+    	
+	    	for(int i=0;i<10;i++) {
+	    		String key = RedisDistributeLock.getLockKey(HelloController.class,"key",String.valueOf(i),"");
+	    		if (RedisDistributeLock.tryLock(key)) {
+	    			logger.info("获取到锁 key"+key);
+	    			try {
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+					} finally {
+						 RedisDistributeLock.unlock(key);
+					}
+	    		}
+	    	}
+    	
     }
     
     

@@ -1,5 +1,10 @@
 package com.zm.provider.mq;
 
+/**
+ * 绑定关系的接口定义
+ * @author yp-tc-m-7129
+ *
+ */
 public interface MyRabbitMqConfig {
 
 	/**

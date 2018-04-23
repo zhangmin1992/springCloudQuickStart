@@ -62,6 +62,10 @@ public class AmqpConfig {
         return connectionFactory;
     }
 	
+	/**
+	 * 定义多个对应的队列交换机和绑定关系-队列1
+	 * @return
+	 */
 	@Bean
 	Queue queue() {
 		return new Queue(MyRabbitMqConfig.queueName, false);
@@ -77,6 +81,10 @@ public class AmqpConfig {
         return BindingBuilder.bind(queue()).to(exchange()).with(MyRabbitMqConfig.keyName);
     }
     
+    /**
+     * 队列2
+     * @return
+     */
     @Bean
 	Queue queue2() {
 		return new Queue(MyRabbitMqConfig.queueName2, false);
