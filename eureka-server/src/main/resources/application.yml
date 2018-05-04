@@ -1,0 +1,40 @@
+spring:
+  profiles: dev
+  application:
+    name: spring-cloud-eureka
+server:
+  port: 8012
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    hostname: peer2
+    lease-renewal-interval-in-seconds: 20
+    lease-expiration-duration-in-seconds: 60
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url.defaultZone: http://peer3:8013/eureka/
+my:
+  name: devName
+
+---   
+spring:
+  profiles: qa
+  application:
+    name: spring-cloud-eureka
+server:
+  port: 8018
+eureka:
+  server:
+    enable-self-preservation: false
+  instance:
+    hostname: peer2
+    lease-renewal-interval-in-seconds: 20
+    lease-expiration-duration-in-seconds: 60
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url.defaultZone: http://peer3:8013/eureka/
+my:
+  name: qaname

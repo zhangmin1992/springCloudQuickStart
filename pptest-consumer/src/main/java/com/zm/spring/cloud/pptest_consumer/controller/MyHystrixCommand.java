@@ -6,21 +6,28 @@ import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.zm.provider.entity.Book;
 
-public class CommandHelloWorld  extends HystrixCommand<Book> {
-
+/**
+* @Description:
+* @author zhangmin 
+* @date 2018年4月9日 下午2:36:49
+ */
+public class MyHystrixCommand  extends HystrixCommand<String> {
+	
 	private RestTemplate restTemplate;
 	
-	private String name;
+	private String param;
 	 
-	public CommandHelloWorld(String name,RestTemplate restTemplate) {
+	public MyHystrixCommand(String param,RestTemplate restTemplate) {
         //父类构造方法,只需要传入一个GroupKey
         super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
         this.restTemplate = restTemplate;
+        this.param = param;
     }
     
     //真实的方法,在这调用服务等,并返回结果
     @Override
-    protected Book run() throws Exception {
-        return restTemplate.getForObject("http://HELLO-SERVICE/sayBook", Book.class);
+    protected String run() throws Exception {
+    	 return restTemplate.getForEntity("http://HELLO-SERVICE/testZzul?param={1}", String.class,param).getBody();
     }
+	
 }

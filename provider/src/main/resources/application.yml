@@ -1,0 +1,72 @@
+spring:
+  profiles: dev
+  application:
+    name: hello-service
+  datasource:
+    url: jdbc:mysql://10.151.11.3:3306/payplus_test
+    username: ppl
+    password: ppl123456
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+      host: localhost
+      timeout: 2000 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtualHost: YQT
+mybatis:
+  typeAliasesPackage: com.zm.provider.entity
+  mapperLocations: classpath:mapper/*.xml
+server:
+  port: 8081
+eureka:
+  client:
+    service-url.defaultZone: http://peer2:8012/eureka
+    register-with-eureka: true
+feign:
+  httpclient:
+    enabled: true
+my:
+  name: devName 
+
+#使用自定义负载均衡配置的资源文件实现方式
+#hello-service:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.zm.provider.config.MyRule
+#    listOfServers: http://localhost:8080/,http://localhost:8081/ 
+---
+
+spring:
+  profiles: qa
+  application:
+    name: hello-service
+  datasource:
+    url: jdbc:mysql://bj-cdb-kfxut7i1.sql.tencentcdb.com:63640/dev_payplus?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+    username: dev_accounting
+    password: dev_payplus@Jia007
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+      host: localhost
+      timeout: 2000 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtualHost: YQT
+mybatis:
+  typeAliasesPackage: com.zm.provider.entity
+  mapperLocations: classpath:mapper/*.xml
+server:
+  port: 8081
+eureka:
+  client:
+    service-url.defaultZone: http://peer2:8012/eureka
+    register-with-eureka: true
+feign:
+  httpclient:
+    enabled: true
+my:
+  name: qaName

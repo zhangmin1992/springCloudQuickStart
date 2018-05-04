@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zm.provider.dao.TestInsertEntityDao">
+ 
+  <resultMap id="BaseResultMap" type="com.zm.provider.entity.TestInsertEntity">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <insert id="insetTestInfo" parameterType="com.zm.provider.entity.TestInsertEntity">
+	   insert into test_insert (id,name)
+	   values (
+		   #{id,jdbcType=VARCHAR},
+		   #{name,jdbcType=VARCHAR}
+	   )
+  </insert>
+
+  <delete id="deleteInfo">
+   delete from test_insert where 1=1
+ </delete>
+ 
+</mapper>

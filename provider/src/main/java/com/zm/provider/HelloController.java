@@ -232,7 +232,7 @@ public class HelloController {
     	}*/
     
     /**
-     * 测试分布式锁
+     * 测试分布式锁-暂时没发现问题
      */
 	 @RequestMapping(value="testRedisLock")
 	    public void testRedisLock() {
@@ -243,12 +243,13 @@ public class HelloController {
 					for(int i=0;i<10;i++) {
 			    		String key = RedisDistributeLock.getLockKey(HelloController.class,"key",String.valueOf(i),"");
 			    		if (RedisDistributeLock.tryLock(key)) {
-			    			logger.info("获取到锁 key"+key);
+			    			logger.info("线程一获取到锁 key"+key);
 			    			try {
-								
+			    				Thread.sleep(1000);
 							} catch (Exception e) {
 								// TODO: handle exception
 							} finally {
+								 logger.info("线程一准备删除 key"+key);
 								 RedisDistributeLock.unlock(key);
 							}
 			    		}
@@ -260,12 +261,13 @@ public class HelloController {
 	    	for(int i=0;i<10;i++) {
 	    		String key = RedisDistributeLock.getLockKey(HelloController.class,"key",String.valueOf(i),"");
 	    		if (RedisDistributeLock.tryLock(key)) {
-	    			logger.info("获取到锁 key"+key);
+	    			logger.info("线程二获取到锁 key"+key);
 	    			try {
-						
+						Thread.sleep(1000);
 					} catch (Exception e) {
 						// TODO: handle exception
 					} finally {
+						 logger.info("线程二准备删除 key"+key);
 						 RedisDistributeLock.unlock(key);
 					}
 	    		}

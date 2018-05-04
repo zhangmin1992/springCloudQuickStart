@@ -29,7 +29,7 @@ public class RedisDistributeLock {
      */
     public static boolean tryLock(String lockKey) {
         CheckUtils.notEmpty(lockKey,"lockKey");
-        return RedisToolUtils.set(lockKey, LocalDateTime.now().toString(), "NX", "PX", 2000 * 60);
+        return RedisToolUtils.set(lockKey, LocalDateTime.now().toString(), "NX", "PX", 6000);
     }
 
     /**

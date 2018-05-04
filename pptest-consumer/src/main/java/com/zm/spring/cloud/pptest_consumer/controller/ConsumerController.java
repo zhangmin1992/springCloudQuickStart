@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.Future;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.xml.transform.StringResult;
 
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -131,14 +133,77 @@ public class ConsumerController {
      * 方法上通过@HystrixCommand注解来指定请求失败时回调的方法,跳转方法不能再用@RequestMapping声明了
      * 请求失败(异常，拒绝，超时，短路)时执行fallback(降级)逻辑
      * 如果有异常我们需要直接捕获到抛给用户不是跳转到error方法可以加注解ignoreExceptions = ArithmeticException.class
+     * 断路器一旦开启，就会直接调用回退方法，不再执行命令，而且也不会更新链路的健康状况，断路器的开启需要满足2个条件
+     * 整个链路达到一定的阀值，默认情况下，10秒内产生超过20次请求，则符合第一个条件。
+     * 满足第一个条件的情况下，如果请求的错误百分比大于阀值，则会打开断路器，默认为50%
+     *
      * @return
      */
     //@HystrixCommand(fallbackMethod = "error",ignoreExceptions = ArithmeticException.class)
     @HystrixCommand(fallbackMethod = "error")
     @RequestMapping("/testHystrix2")
     public String testHystrix2(String param) {
-    	logger.info("进入testHystrix2----方法");
-    	return helloService.testZzul(param);
+    	
+    	/*for(int i=0;i<15;i++) {
+    		try{
+	    		logger.info("进入testHystrix2----方法");
+	        	String result = helloService.testZzul(param);
+	        	logger.info("result="+result);
+    		}catch(Exception e) {
+    			
+    		}
+    	}*/
+    	
+    	/*MyHystrixCommand myHystrixCommand1 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand1.execute();
+        System.out.println("myHystrixCommand1 断路器状态" + myHystrixCommand1.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand2 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand2.execute();
+        System.out.println("myHystrixCommand2 断路器状态" + myHystrixCommand2.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand3 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand3.execute();
+        System.out.println("myHystrixCommand3 断路器状态" + myHystrixCommand3.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand4 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand4.execute();
+        System.out.println("myHystrixCommand4 断路器状态" + myHystrixCommand4.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand5 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand5.execute();
+        System.out.println("myHystrixCommand5 断路器状态" + myHystrixCommand5.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand6 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand6.execute();
+        System.out.println("myHystrixCommand6 断路器状态" + myHystrixCommand6.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand7 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand7.execute();
+        System.out.println("myHystrixCommand7 断路器状态" + myHystrixCommand7.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand8 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand8.execute();
+        System.out.println("myHystrixCommand8 断路器状态" + myHystrixCommand8.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand9 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand9.execute();
+        System.out.println("myHystrixCommand9 断路器状态" + myHystrixCommand9.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand10 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand10.execute();
+        System.out.println("myHystrixCommand10 断路器状态" + myHystrixCommand10.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand11 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand11.execute();
+        System.out.println("myHystrixCommand11 断路器状态" + myHystrixCommand11.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand12 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand12.execute();
+        System.out.println("myHystrixCommand12 断路器状态" + myHystrixCommand12.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand13 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand13.execute();
+        System.out.println("myHystrixCommand13 断路器状态" + myHystrixCommand13.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand14 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand14.execute();
+        System.out.println("myHystrixCommand14 断路器状态" + myHystrixCommand14.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand15 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand15.execute();
+        System.out.println("myHystrixCommand15 断路器状态" + myHystrixCommand15.isCircuitBreakerOpen());
+        MyHystrixCommand myHystrixCommand16 = new MyHystrixCommand("2",restTemplate);
+        myHystrixCommand16.execute();
+        System.out.println("myHystrixCommand16 断路器状态" + myHystrixCommand16.isCircuitBreakerOpen());*/
+    	
+    	return "ok";
     }
     
     /**
@@ -161,14 +226,14 @@ public class ConsumerController {
     @HystrixCommand
     @RequestMapping("/testHystrixCommand")
     public Book testHystrixCommand() throws InterruptedException, ExecutionException, TimeoutException {
-    	logger.info("进入testHystrixCommand方法");
-//    	Future<Book> bookFuture = helloService.testHystrixCommand();
-//        //return bookFuture.get();
-//        //1分钟没有返回则超时时长
-//        return bookFuture.get(1, TimeUnit.MINUTES);
-    	  Future<Book> bookFuture  = new CommandHelloWorld("World",restTemplate).queue();
-    	  return bookFuture.get();
-        
+		logger.info("进入testHystrixCommand方法");
+		//Future<Book> bookFuture = helloService.testHystrixCommand();
+		// return bookFuture.get();
+		// 1分钟没有返回则超时时长
+		//return bookFuture.get(1, TimeUnit.MINUTES);
+		
+		Future<Book> bookFuture = new CommandHelloWorld("World", restTemplate).queue();
+		return bookFuture.get();
     }
     
     /**
@@ -181,6 +246,7 @@ public class ConsumerController {
     @HystrixCommand(commandProperties = {
             @HystrixProperty(name="requestCache.enabled",value = "true")
     })
+    
     @RequestMapping("/testCacheResult")
     public String testCacheResult(Integer id,String aa) {
     	logger.info("进testCacheResult方法");
