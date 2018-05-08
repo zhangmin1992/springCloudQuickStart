@@ -1,5 +1,6 @@
 package com.zm.provider.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -35,6 +36,16 @@ public class TestInsertServiceImpl implements TestInsertService {
 	@Override
 	public void deleteInfo() {
 		testInsertEntityDao.deleteInfo();
+	}
+
+	@Override
+	public List<TestInsertEntity> getInsertInfo() {
+		return testInsertEntityDao.getInsertInfo();
+	}
+
+	@Override
+	public void batchDelete(List<TestInsertEntity> list) {
+		testInsertEntityDao.batchDelete(list);
 	}
 
 }

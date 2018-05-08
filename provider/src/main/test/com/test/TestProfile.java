@@ -1,12 +1,15 @@
 package com.test;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.service.LegalHolidaysService;
 import com.zm.provider.service.TestInsertService;
+import com.zm.provider.util.CheckUtils;
 
 @ActiveProfiles("dev")
 public class TestProfile extends SpringbootJunitTest {
@@ -41,10 +44,26 @@ public class TestProfile extends SpringbootJunitTest {
 	@Test
 	public void testInsert() {
 		Long beginLong =  System.currentTimeMillis();
-		testInsertService.deleteInfo();
+		//testInsertService.deleteInfo();
 		for(int i = 0;i<20;i++) {
 			testInsertService.insertTestInfo(i+"");
 		}
 		System.out.println("---------------耗时" + (System.currentTimeMillis()-beginLong));
+	}
+	
+	/**
+	 * 测试20条数据是直接删除快还是查询下按照id删除快
+	 * 直接删除 耗时 81
+	 * 查询 批量删除 耗时239
+	 */
+	@Test
+	public void testDelete() {
+		Long beginLong =  System.currentTimeMillis();
+		//testInsertService.deleteInfo();
+		List<TestInsertEntity> list = testInsertService.getInsertInfo();
+		if(!CheckUtils.isEmpty(list)) {
+			testInsertService.batchDelete(list);
+		}
+		System.out.println("---------------删除耗时" + (System.currentTimeMillis()-beginLong));
 	}
 }

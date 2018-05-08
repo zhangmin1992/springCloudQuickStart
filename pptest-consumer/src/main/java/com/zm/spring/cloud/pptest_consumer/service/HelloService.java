@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
 import com.zm.provider.entity.Book;
 
@@ -16,8 +18,14 @@ public class HelloService {
     @Autowired
     private RestTemplate restTemplate;
     
+    @CacheResult
+    @HystrixCommand(commandProperties = {@HystrixProperty(name="requestCache.enabled",value = "true")})
+    public String hello(String param) {
+    	return restTemplate.getForEntity("http://HELLO-SERVICE/hello", String.class).getBody();
+    }
+    
     public String testZzul(String param) {
-        return restTemplate.getForEntity("http://HELLO-SERVICE/testZzul?param={1}", String.class,param).getBody();
+    	return restTemplate.getForEntity("http://HELLO-SERVICE/testZzul?param={1}", String.class,param).getBody();
     }
     
     @HystrixCommand

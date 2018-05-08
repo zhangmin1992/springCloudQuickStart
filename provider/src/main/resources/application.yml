@@ -30,12 +30,7 @@ feign:
     enabled: true
 my:
   name: devName 
-
-#使用自定义负载均衡配置的资源文件实现方式
-#hello-service:
-#  ribbon:
-#    NFLoadBalancerRuleClassName: com.zm.provider.config.MyRule
-#    listOfServers: http://localhost:8080/,http://localhost:8081/ 
+  
 ---
 
 spring:

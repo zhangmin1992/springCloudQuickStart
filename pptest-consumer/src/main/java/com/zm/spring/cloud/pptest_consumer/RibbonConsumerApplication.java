@@ -7,6 +7,8 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,12 +19,15 @@ import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
 @EnableCircuitBreaker
 @EnableCaching
 @EnableFeignClients
+@EnableHystrix
+@EnableHystrixDashboard
 /**
  * EnableCircuitBreaker表示开启断路器
  * @SpringBootApplication 表示是启动类
  * @EnableDiscoveryClient 表示服务发现
  * 我们也可以使用SpringCloudApplication代替上面的三个注解
  * @EnableFeignClients 表示开启fegin
+ * @EnableHystrix 开启hystrix
  * 
  * 
  * @author yp-tc-m-7129
@@ -43,9 +48,19 @@ public class RibbonConsumerApplication {
 	    RestTemplate restTemplate() {
 	        return new RestTemplate();
 	    }
+	   
+	    /**
+	    * 自定义的负载均衡器
+	    * @return
+	    */
+	    /*@MyLoadBalanced
+	    @Bean
+	    RestTemplate restTemplate() {
+	        return new RestTemplate();
+	    }*/
 	    
 	    /**
-	     * 为了可以使用断路器,
+	     * 为了可以使用断路器
 	     * @return
 	     */
 	    @Bean

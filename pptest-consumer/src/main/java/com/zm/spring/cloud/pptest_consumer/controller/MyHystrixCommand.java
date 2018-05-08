@@ -4,7 +4,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.zm.provider.entity.Book;
+import com.netflix.hystrix.HystrixCommandProperties;
 
 /**
 * @Description:
@@ -18,8 +18,16 @@ public class MyHystrixCommand  extends HystrixCommand<String> {
 	private String param;
 	 
 	public MyHystrixCommand(String param,RestTemplate restTemplate) {
+		
         //父类构造方法,只需要传入一个GroupKey
-        super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
+        //super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
+		
+		//添加了超时时间的命令
+        super(
+                Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
+                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                    .withExecutionTimeoutInMilliseconds(500))
+             );
         this.restTemplate = restTemplate;
         this.param = param;
     }

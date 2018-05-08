@@ -64,6 +64,7 @@ public class HelloController {
      */
     @RequestMapping(value = "/sayHello", method = RequestMethod.GET)
     public String sayHello(String name) {
+    	logger.info("我进入了服务提供者 name=" + name);
     	return "您好"+name;
     }
     
