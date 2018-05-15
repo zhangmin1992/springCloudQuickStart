@@ -143,6 +143,12 @@ public class HelloController {
         return book;
     }
     
+    /**
+     * 这种支持
+     * @param book
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/getBookForObject2")
     public Book getBookForObject2(@RequestBody Book book,@RequestParam(value ="id") String id) {
     	logger.info("----- HelloController getBookForObject,id= "+ id +" book=" + JSONObject.toJSONString(book));
@@ -182,6 +188,18 @@ public class HelloController {
 			return "no";
 		}
     	return "yes";
+    }
+    
+    @RequestMapping(value="timeOut")
+    public String timeOut() {
+    	logger.info("timeOut我进入了服务提供者。。。。");
+    	try {
+			Thread.sleep(1100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return "ok";
     }
     
     /**

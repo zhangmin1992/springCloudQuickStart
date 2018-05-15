@@ -28,6 +28,7 @@ import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
  * 我们也可以使用SpringCloudApplication代替上面的三个注解
  * @EnableFeignClients 表示开启fegin
  * @EnableHystrix 开启hystrix
+ * @EnableHystrixDashboard 开启hystrix仪表盘
  * 
  * 
  * @author yp-tc-m-7129

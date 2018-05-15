@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: pptest-api-gateway
+server:
+  port: 7000
+  
+zuul:
+  routes:
+    #忽略的url请求这个请求不会转发
+    ignored-patterns: /ignored/**
+    ignored-services: ribbon-consumer
+    #所有/api-consumer/**请求会转发给ribbon-consumer消费者服务实例处理
+    #等价于zuul.routes.ribbon-consumer =/api-consumer/**
+    api-a:
+      path: /api-consumer/**
+      serviceId: ribbon-consumer
+    api-b:
+      path: /api-forward/**
+      url: forward:/local
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
+    
+#需要通过eureka指导服务实例地址  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://peer2:8012/eureka

@@ -26,12 +26,26 @@
   
   <dependencies>
     <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    
+    <!-- 自带了对ribbon的依赖能够实现请求负载均衡 -->
+    <dependency>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-zuul</artifactId>
 	</dependency>
+	
+	<!-- 要实现面相服务的路由转发而不是针对具体url地址的转发，需要让网关注册到eureka上并且能够发现服务实例 -->
 	<dependency>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-eureka</artifactId>
+	</dependency>
+	
+	<!-- 修改java文件后快速启动热部署 -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-devtools</artifactId>
 	</dependency>
 	
 	<!-- 下面这3个部分是说缺少包，缺少类才多导入的几个 -->
@@ -52,7 +66,11 @@
 	    <artifactId>hystrix-javanica</artifactId>
 	    <version>1.5.9</version>
 	</dependency>
-</dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-jta-narayana</artifactId>
+	</dependency>
+  </dependencies>
 
 <dependencyManagement>
         <dependencies>

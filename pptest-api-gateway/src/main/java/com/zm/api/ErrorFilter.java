@@ -7,34 +7,37 @@ import org.apache.log4j.Logger;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
+/**
+ * 统一异常拦截器
+ * @author yp-tc-m-7129
+ *
+ */
 public class ErrorFilter extends ZuulFilter {
 
+	private final Logger log = Logger.getLogger(ZuulFilter.class);
+	
     private static final String ERROR_STATUS_CODE_KEY = "error.status_code";
-
-    private final Logger log = Logger.getLogger(ZuulFilter.class);
 
     public static final String DEFAULT_ERR_MSG = "系统繁忙,请稍后再试";
 
     @Override
     public String filterType() {
-        return "post";
+        return "error";
     }
 
     @Override
     public int filterOrder() {
-        return 0;
+    	return 1;
     }
 
     @Override
     public boolean shouldFilter() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        return ctx.containsKey(ERROR_STATUS_CODE_KEY);
+        return true;
     }
 
     @Override
     public Object run() {       
         RequestContext ctx = RequestContext.getCurrentContext();
-
         try {
         	//获取返回请求的错误码和错误信息
             HttpServletRequest request = ctx.getRequest();
@@ -42,8 +45,7 @@ public class ErrorFilter extends ZuulFilter {
             String message = (String) ctx.get("error.message");
             
             if (ctx.containsKey("error.exception")) {
-                Throwable e = (Exception) ctx.get("error.exception");
-                Throwable re = getOriginException(e);
+                Throwable re = (Exception) ctx.get("error.exception");
                 if(re instanceof java.net.ConnectException){
                     message = "Real Service Connection refused";
                     log.warn("uri:{},error:{}" + request.getRequestURI() + re.getMessage());
@@ -54,7 +56,7 @@ public class ErrorFilter extends ZuulFilter {
                     message = re.getMessage();
                     log.warn("uri:{},error:{}" + request.getRequestURI() + re.getMessage());
                 }else{
-                    log.warn("Error during filtering",e);
+                    log.warn("Error during filtering",re);
                 }
             }
 
@@ -70,13 +72,5 @@ public class ErrorFilter extends ZuulFilter {
         }
         return null;
 
-    }
-
-    private Throwable getOriginException(Throwable e){
-        e = e.getCause();
-        while(e.getCause() != null){
-            e = e.getCause();
-        }
-        return e;
     }
 }

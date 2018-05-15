@@ -1,23 +1,13 @@
-package com.zm.spring.cloud.pptest_consumer.controller;
+package com.zm.provider;
 
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zm.provider.entity.Book;
 
-/**
- * 使用feign避免使用restTemplate的统一模板方式
- * 使用了Spring Cloud的“翻译器”后，将不能再使用Feign的默认注解,两种翻译器两者只能二选一，使用fegin的翻译器需要注解@RequestLine
- * 可以采用继承facade的方式或者在本接口中定义调用的方法
- * @author yp-tc-m-7129
- *
- */
-//声明调用的服务名称
-@FeignClient("HELLO-SERVICE")
-public interface HelloFeignClient {
-	
+public interface HelloControllerFacade {
+
 	@RequestMapping("/hello")
     String hello();
 	
@@ -39,5 +29,5 @@ public interface HelloFeignClient {
 	Book getBookForObject2(@RequestBody Book book,@RequestParam(value ="id") String id);
 	
 	@RequestMapping("/timeOut")
-    String timeOut();
+	String timeOut();
 }

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.HystrixCircuitBreaker;
+import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheKey;
@@ -473,5 +475,27 @@ public class ConsumerController {
     @RequestMapping("/getPro")
     public String getPro() {
     	return ctx.getEnvironment().getProperty("server.port");
+    }
+    
+    /**
+     * 请求fegin超时断路器打开测试
+     * 并不是全部20次请求，断路器应该打开了只不过不是这个key报错空指针
+     * @return
+     */
+    @HystrixCommand(commandKey="helloFeignClient#timeOut()")
+    @RequestMapping(value = "/timeOut", method = RequestMethod.GET)
+    public String timeOut() {
+    	HystrixCircuitBreaker breaker = HystrixCircuitBreaker.Factory
+                .getInstance(HystrixCommandKey.Factory
+                        .asKey("helloFeignClient#timeOut()"));  
+    	for(int i=0;i<20;i++) {
+    		try {
+    			helloFeignClient.timeOut();
+			} catch (Exception e) {
+				System.out.println("断路器中间状态：" + breaker.isOpen());
+			}
+    	}
+        System.out.println("断路器状态：" + breaker.isOpen());
+        return "ok";
     }
 }
