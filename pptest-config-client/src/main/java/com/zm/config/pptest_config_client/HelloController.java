@@ -7,6 +7,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 通过注入的Environment对象或者@Value来获取资源文件的值
+ * @author yp-tc-m-7129
+ *
+ */
 @RestController
 @RefreshScope
 public class HelloController {

@@ -7,7 +7,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +43,7 @@ import com.zm.spring.cloud.pptest_consumer.service.HelloService;
  */
 public class ConsumerController {
 	
-	private final Logger logger = Logger.getLogger(ConsumerController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConsumerController.class);
 	
     @Autowired
     RestTemplate restTemplate;

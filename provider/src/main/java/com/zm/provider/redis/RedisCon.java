@@ -1,7 +1,9 @@
 package com.zm.provider.redis;
 
 import java.lang.reflect.Method;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -15,6 +17,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableCaching
 public class RedisCon extends CachingConfigurerSupport {
 
-	private final Logger logger = Logger.getLogger(RedisCon.class);
+	private static final Logger logger = LoggerFactory.getLogger(RedisCon.class);
 	
 	@Autowired
 	private MyRedisConfig redisConfig;

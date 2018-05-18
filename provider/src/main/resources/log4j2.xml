@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<Configuration status="WARN" monitorInterval="30">
+    <Appenders>
+    	<!-- 输出到控制台 -->
+        <Console name="STDOUT" target="SYSTEM_OUT">
+        	<!-- 
+        	   %d 日期
+        	   %p 日志级别
+        	   %c 输出所属的类目，通常就是所在类的全名 
+        	  [%t] 线程
+        	   - %m 输出代码中指定的消息
+        	   %n  换行
+        	   %L : 日志输出所在行数
+               %M : 日志输出所在方法名
+        	 -->
+           <PatternLayout pattern="%d %p %c [%t] - %m%n"/>
+        </Console>
+
+		<!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份-日建立的文件夹下面并进行压缩，作为存档 -->
+		<RollingFile name="RollingFileInfo" fileName="${sys:user.home}/logs/info.log"
+			filePattern="${sys:user.home}/logs/provider/${date:yyyy-MM-dd}/info-%d{yyyy-MM-dd}-%i.log.gz">
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n" />
+			<Policies>
+				 <SizeBasedTriggeringPolicy size="100 MB" />
+				 <!-- 切割文件的话最多切割多少个 -->
+				 <DefaultRolloverStrategy max="20"/>
+			</Policies>
+		</RollingFile>
+		
+		<!-- 按照天来存储，过了这天的东西会被保存为压缩包,并且配置了大小分割 -->
+		<RollingFile name="InfoFileAppender" fileName="${sys:user.home}/logs/info.log"
+                     filePattern="${sys:user.home}/logs/provider/${date:yyyy-MM-dd}/info-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d %-5p %c:%L [%t] - %m%n"/>
+            <Policies>
+            	<!-- 时间滚动策略，默认1小时 -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="24"/>
+            </Policies>
+        </RollingFile>
+        
+       
+    </Appenders>
+ 
+	<!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <Loggers>
+    	<Logger name="com.opensymphony.xwork2.ognl.OgnlValueStack" level="ERROR"/>
+        <logger name="org.springframework" level="INFO"></logger>
+        <logger name="org.mybatis" level="INFO"></logger>
+        <Logger name="net.sf.ehcache" level="INFO"/>
+        <Logger name="com.alisoft.xplatform.asf" level="WARN"/>
+        <Logger name="com.mbi" level="ERROR"/>
+        <Logger name="net.mlw" level="INFO"/>
+        <Logger name="java.sql" level="INFO"/>
+        <Logger name="org.hibernate.type" level="ERROR"/>
+        <Logger name="com.opensymphony.webwork" level="ERROR"/>
+        <Logger name="org.apache" level="INFO"/>
+        <Logger name="org.jgroups" level="WARN"/>
+        <Logger name="org.jboss.axis" level="INFO"/>
+        <Logger name="org.jboss.management" level="INFO"/>
+        <Logger name="org.apache.commons.httpclient" level="ERROR"/>
+        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="org.springboot" level="INFO" />
+
+		<!-- 缺省日志级别，如果package有定制级别，则按package的定制级别走，即使package级别更低 -->
+        <Root level="INFO">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="RollingFileInfo"/>
+            <!-- <AppenderRef ref="InfoFileAppender"/> -->
+        </Root>
+    </Loggers>
+    
+</Configuration>

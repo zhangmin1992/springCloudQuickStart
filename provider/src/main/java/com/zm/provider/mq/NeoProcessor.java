@@ -2,7 +2,8 @@ package com.zm.provider.mq;
 
 import java.time.LocalDate;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -21,7 +22,7 @@ public class NeoProcessor {
 	 @Autowired
 	 private LegalHolidaysService legalHolidaysService;
 	 
-	 private final Logger LOGGER = Logger.getLogger(HelloController.class);
+	 private static final Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 	
 	 public void onMessage(Message message, Channel channel) throws Exception {
 		LOGGER.info("进入onMessage");

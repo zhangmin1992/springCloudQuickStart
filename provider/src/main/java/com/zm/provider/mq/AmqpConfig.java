@@ -1,6 +1,7 @@
 package com.zm.provider.mq;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -8,14 +9,8 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import com.zm.provider.ProviderApplication;
 
 /**
  * mq的绑定关系
@@ -25,7 +20,7 @@ import com.zm.provider.ProviderApplication;
 @Component
 public class AmqpConfig {
 
-	private final Logger logger = Logger.getLogger(AmqpConfig.class);
+	private static final Logger Logger = LoggerFactory.getLogger(AmqpConfig.class);
 		 
 	@Autowired
     private RabbitMq rabbitMq;

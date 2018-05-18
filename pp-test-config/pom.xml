@@ -33,6 +33,12 @@
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
+		
+		<!-- mq部分 -->
+		<dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+		</dependency>
 	</dependencies>
 	
 	<dependencyManagement>

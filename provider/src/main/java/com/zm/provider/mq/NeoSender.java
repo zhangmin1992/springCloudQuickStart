@@ -1,16 +1,15 @@
 package com.zm.provider.mq;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.zm.provider.HelloController;
-
 @Component
 public class NeoSender {
 
-   private final Logger logger = Logger.getLogger(HelloController.class);
+   private static final Logger logger = LoggerFactory.getLogger(NeoSender.class);
 	
    @Autowired
    private AmqpTemplate rabbitTemplate;

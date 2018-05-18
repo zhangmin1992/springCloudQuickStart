@@ -2,14 +2,15 @@ package com.zm.provider.redis;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BaseCacheKeyGenerator implements KeyGenerator {
 
-	private final Logger logger = Logger.getLogger(RedisCon.class);
+	private static final Logger logger = LoggerFactory.getLogger(RedisCon.class);
 	
 	@Override
 	public Object generate(Object target, Method method, Object... params) {

@@ -1,15 +1,15 @@
 package com.zm.spring.cloud.pptest_consumer.controller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.zm.provider.entity.Book;
 
 public class CommandHelloWorld  extends HystrixCommand<String> {
 
-	private final Logger logger = Logger.getLogger(CommandHelloWorld.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommandHelloWorld.class);
 	
 	private RestTemplate restTemplate;
 	

@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -27,7 +28,7 @@ import com.zm.provider.util.redis.RedisDistributeLock;
 @RestController
 public class HelloController {
     
-	private final Logger logger = Logger.getLogger(HelloController.class);
+	private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
     
 	@Autowired
 	private BookEntityDao bookEntityDao;
