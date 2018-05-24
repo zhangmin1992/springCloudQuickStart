@@ -1,7 +1,7 @@
-package com.zm.provider;
+package com.zm.provider.exception;
 
 public class MyException extends PayplusBizException {
-
+	
 	/**
      * 未知异常
      */

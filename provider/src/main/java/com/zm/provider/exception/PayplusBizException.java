@@ -1,4 +1,4 @@
-package com.zm.provider;
+package com.zm.provider.exception;
 
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;

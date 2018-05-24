@@ -3,6 +3,12 @@ package com.zm.provider.mq;
 import org.springframework.boot.context.properties.ConfigurationProperties;  
 import org.springframework.context.annotation.Configuration;  
 
+/**
+ * 加载本地资源文件,并且将属性注入到bean中
+ * 然后写上个配置类@Configuration,写上前缀，类的字段属性就是配置文件的值
+ * @author yp-tc-m-7129
+ *
+ */
 @Configuration  
 @ConfigurationProperties(prefix = "spring.rabbitmq")  
 public class RabbitMq{  

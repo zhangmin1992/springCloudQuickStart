@@ -22,28 +22,28 @@
     </properties>
     
     <dependencies>
-    	<!-- 引入日志需要去掉spring-boot-starter-logging这个包 -->
-    	<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>      
-        
-        <dependency>
+    	  <!-- 引入日志同时替换掉原来的日志，需要注意不能加下面注释的，否则会报错数据库连接不上 -->
+    	  <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
         
     	<!-- web模块 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
+             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
@@ -129,7 +129,7 @@
             <artifactId>jedis</artifactId>  
         </dependency>
 
-		<!-- 安全检查要用到的 -->
+		<!-- 安全检查要用到的,同时用于spring-config-client的动态刷新 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -141,16 +141,62 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		
-		<!-- 服务追踪 -->
+		<!-- spring-boot-mail 发送邮箱 -->
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+   		</dependency>
+   		
+   		<!-- 希望加入config充当config-client角色来获取远程git资源文件的值未成功 -->
+	    <!-- dependency>
+	        <groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-config</artifactId>
+	    </dependency>
+   		
+   		<dependency>
+   			 <groupId>com.zm.spring.cloud</groupId>
+			 <artifactId>pptest-config-client</artifactId>
+			 <version>0.0.1-SNAPSHOT</version>
+   		</dependency> -->
+   		
+   		<!-- Spring Boot Freemarker 依赖，发送HTML格式的邮件的方式 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
 
+	    <!-- 使用模板导出txt的依赖包 mvel表达式 -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jta-narayana</artifactId>
+			<groupId>org.mvel</groupId>
+			<artifactId>mvel2</artifactId>
+			<version>2.0</version>
 		</dependency>
+	
+		<!-- 阿里云发送短信服务依赖包3个 -->
+		<dependency>
+			<groupId>aliyun-message-sdk-core</groupId>
+			<artifactId>aliyun-message-sdk-core</artifactId>
+			<version>3.3.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/aliyun-java-sdk-core-3.3.1.jar</systemPath>
+		</dependency>
+	
+		<dependency>
+			<groupId>aliyun-message-sdk-mns</groupId>
+			<artifactId>aliyun-message-sdk-mns</artifactId>
+			<version>1.1.8</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/aliyun-sdk-mns-1.1.8.jar</systemPath>
+		</dependency>
+	
+		<dependency>
+			<groupId>aliyun-java-sdk-dysmsapi</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
+		</dependency>
+        
     </dependencies>
     
     <dependencyManagement>

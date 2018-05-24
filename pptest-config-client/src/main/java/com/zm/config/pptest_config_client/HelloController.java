@@ -16,21 +16,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 public class HelloController {
 	
+	/**
+	 * @Value获取指定资源文件的值
+	 */
     @Value("${my.name}")
     String myName;
     
-    @Value("${name}")
-    String name;
-    
-    @Autowired
-    Environment env;
-
     @RequestMapping("/getMyName")
     public String getMyName() {
         return this.myName;
     }
+    
+    /**
+     * Environment方式获取指定资源文件的值
+     */
+    @Autowired
+    Environment env;
+    
     @RequestMapping("/getMyName2")
     public String getMyName2() {
         return env.getProperty("name", "未定义");
+    }
+    
+    @RequestMapping("/getMeName")
+    public String getMeName() {
+        return env.getProperty("me.name", "义");
+    }
+    
+    /**
+     * 写一个common组件获取所有dev资源文件的配置
+     */
+    @Autowired
+	ClientConfig clientConfig;
+    
+    @RequestMapping("/getMyName3")
+    public String getMyName3() {
+        return clientConfig.getReceiveMailList();
     }
 }
