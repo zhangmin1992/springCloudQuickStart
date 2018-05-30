@@ -5,14 +5,22 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.zm.provider.HelloController;
+import com.zm.provider.dao.BookEntityDao;
+import com.zm.provider.dao.PayEntityDao;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Email;
+import com.zm.provider.entity.Pay;
 import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.mq.RabbitMq;
 import com.zm.provider.service.ExcelService;
@@ -20,10 +28,19 @@ import com.zm.provider.service.LegalHolidaysService;
 import com.zm.provider.service.SendEmailService;
 import com.zm.provider.service.TestInsertService;
 import com.zm.provider.util.CheckUtils;
+import com.zm.provider.util.redis.RedisToolUtils;
 
 @ActiveProfiles("dev")
 public class TestProfile extends SpringbootJunitTest {
 
+	private static final Logger logger = LoggerFactory.getLogger(TestProfile.class);
+	
+	@Autowired
+	private BookEntityDao bookEntityDao;
+	
+	@Autowired
+	private PayEntityDao payEntityDao;
+	
 	@Autowired
     private JavaMailSender mailSender;
 	
@@ -96,12 +113,14 @@ public class TestProfile extends SpringbootJunitTest {
 	public void testEmail() throws Exception {
 		String subject="邮件主题";
 		String content="邮件内容";
-		String[] receiveArray = {"2413@qq.com","min.zhang-2@jia007.com"};
+		String[] receiveArray = {"2413172711@qq.com"};
 		Email email = new Email(receiveArray, subject, content, null, null);
-		sendEmailService.sendSimpleMail(email);
+		//sendEmailService.sendSimpleMail(email);
 		
-		//sendEmailService.sendHtmlSimpleMail();
+		sendEmailService.sendHtmlSimpleMail();
 		//sendEmailService.sendFreemarker();
+		
+		//sendEmailService.sendFileMail(email);
 	}
 	
 	/**
@@ -135,4 +154,24 @@ public class TestProfile extends SpringbootJunitTest {
 		data.add(new Book("beibei", 18, new Date()));
 		excelService.makeExcel(data);
 	}
+	
+	/**
+	 * 测试缓存和发邮件
+	 */
+	@Test
+	public void testRedisLock() {
+    	logger.info("---开始测试分布式锁");
+    	for (int i = 0; i < 5; i++) {
+			Boolean result = RedisToolUtils.set("mm", "value", "NX", "PX", 8000 * 60);
+	    	if(result) {
+	    		logger.info("准备发送邮件---");
+	    		try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+    	}
+    }
 }

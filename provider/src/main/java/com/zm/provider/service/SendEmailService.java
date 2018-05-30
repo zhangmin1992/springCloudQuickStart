@@ -21,4 +21,11 @@ public interface SendEmailService {
 	 * @throws Exception
 	 */
 	public void sendFreemarker() throws Exception;
+	
+	/**
+	 * ftp获取文件然后发送邮件
+	 * @param email
+	 * @throws Exception
+	 */
+	public void sendFileMail(Email email) throws Exception;
 }

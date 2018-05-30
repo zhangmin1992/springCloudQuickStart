@@ -1,11 +1,16 @@
 package com.zm.provider.service.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +19,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.util.ResourceUtils;
 
 import com.zm.provider.entity.Email;
 import com.zm.provider.service.SendEmailService;
 
-import freemarker.template.Template;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 @Service
 public class SendEmailServiceImpl implements SendEmailService {
@@ -38,20 +43,30 @@ public class SendEmailServiceImpl implements SendEmailService {
 	@Value("${spring.mail.username}")
 	private String sender;
 	
-	public void sendSimpleMail(Email email) throws Exception {
-		LOGGER.info("准备发送简单邮件");
-		try {
-			String [] receiveArray = email.getEmail();
-	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setFrom(sender);
-	        message.setSubject(email.getSubject());
-	        message.setTo(receiveArray);
-	        message.setText(email.getContent());
-	        mailSender.send(message);
-		} catch (Exception e) {
-			LOGGER.error("发生未知异常", e);
-		}
-		
+	@Override
+	public void sendFileMail(Email email) throws Exception {
+		LOGGER.info("准备发送附件给指定邮箱账户");
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
+		String time = LocalDate.now().format(df);
+        String fileName = "11"+time+"03.txt";
+		String [] receiveArray = email.getEmail();
+		MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom("2413172711@qq.com");
+        helper.setTo(receiveArray[0]);
+        helper.setSubject("301对账文件"+fileName);
+        helper.setText("301对账文件见附件",true);
+        String filePath = "/externalcustomer/bjccb/1051100110059397/readFiles/"+fileName;
+        FTPClient ftp = new FTPClient();
+        ftp.connect("59.151.37.187", 21);
+        ftp.login("ftp", "d45ec43f");
+        File localFile = new File("/apps/share/payplus/yqt/a.txt");
+        OutputStream outputStream = new FileOutputStream(localFile);
+        ftp.retrieveFile(filePath, outputStream);
+        ftp.disconnect();
+        helper.addAttachment(fileName, localFile);
+        mailSender.send(message);
+        localFile.delete();
 	}
 
 	@Override
@@ -64,7 +79,7 @@ public class SendEmailServiceImpl implements SendEmailService {
         helper.setSubject("HTML主题");
         helper.setText("<html><body><img src=\"cid:springcloud\" >"
         		+ "</br>"
-        		+"祝我们520快乐!"
+        		+"哈哈!"
         		+ "</body></html>",true);
         // 发送图片
         File file = ResourceUtils.getFile("classpath:static/image/WechatIMG1.jpeg");
@@ -89,5 +104,21 @@ public class SendEmailServiceImpl implements SendEmailService {
 		String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 		helper.setText(text, true);
 		mailSender.send(message);
+	}
+
+	@Override
+	public void sendSimpleMail(Email email) throws Exception {
+		LOGGER.info("准备发送简单邮件");
+		try {
+			String [] receiveArray = email.getEmail();
+	        SimpleMailMessage message = new SimpleMailMessage();
+	        message.setFrom(sender);
+	        message.setSubject(email.getSubject());
+	        message.setTo(receiveArray);
+	        message.setText(email.getContent());
+	        mailSender.send(message);
+		} catch (Exception e) {
+			LOGGER.error("发生未知异常", e);
+		}
 	}
 }

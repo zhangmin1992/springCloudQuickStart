@@ -24,6 +24,7 @@ import com.zm.provider.entity.Pay;
 import com.zm.provider.mq.NeoSender;
 import com.zm.provider.redis.RedisUtils;
 import com.zm.provider.util.redis.RedisDistributeLock;
+import com.zm.provider.util.redis.RedisToolUtils;
 
 @RestController
 public class HelloController {
@@ -190,7 +191,7 @@ public class HelloController {
 		}
     	return "yes";
     }
-    
+   
     @RequestMapping(value="timeOut")
     public String timeOut() {
     	logger.info("timeOut我进入了服务提供者。。。。");
@@ -245,16 +246,27 @@ public class HelloController {
     /**
      * 测试redis整合，工具类方式
      */
-    /*@RequestMapping(value="testRedisLock")
+    @RequestMapping(value="testRedisLock")
     public void testRedisLock() {
     	logger.info("---开始测试分布式锁");
-    	RedisToolUtils.set("cc", "vv");
-    	}*/
+    	
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < 5; i++) {
+					Boolean result = RedisToolUtils.set("mm", "value", "NX", "PX", 8000 * 60);
+			    	if(result) {
+			    		logger.info("准备发送邮件---");
+			    	}
+				}
+			}
+    	}).start();
+    }
     
     /**
      * 测试分布式锁-暂时没发现问题
      */
-	@RequestMapping(value="testRedisLock")
+	/*@RequestMapping(value="testRedisLock")
 	public void testRedisLock() {
 		logger.info("---开始测试分布式锁");
 		new Thread(new Runnable() {
@@ -294,7 +306,7 @@ public class HelloController {
 				}
 			}
 		}
-	}
+	}*/
 	 
 	 //测试获取统一配置的值
 	@RequestMapping(value="getMyName3")

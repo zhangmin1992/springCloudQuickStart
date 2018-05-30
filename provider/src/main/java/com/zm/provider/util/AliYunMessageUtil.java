@@ -59,6 +59,12 @@ public class AliYunMessageUtil {
         return sendSmsResponse;
     }
     
+    /**
+     * 查询短信发送接口
+     * @param bizId
+     * @return
+     * @throws ClientException
+     */
     public static QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
 
         //可自助调整超时时间
@@ -101,7 +107,6 @@ public class AliYunMessageUtil {
         System.out.println("BizId=" + response.getBizId());
 
         Thread.sleep(3000L);
-        
       //查明细
       if(response.getCode() != null && response.getCode().equals("OK")) {
             QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(response.getBizId());
