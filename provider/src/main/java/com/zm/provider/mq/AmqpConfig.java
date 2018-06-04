@@ -61,39 +61,39 @@ public class AmqpConfig {
 	 * 定义多个对应的队列交换机和绑定关系-队列1
 	 * @return
 	 */
-	@Bean
-	Queue queue() {
-		return new Queue(MyRabbitMqConfig.queueName, false);
-	} 
-	 
-    @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(MyRabbitMqConfig.exchangeName);
-    }
-    
-    @Bean
-    Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange()).with(MyRabbitMqConfig.keyName);
-    }
+//	@Bean
+//	Queue queue() {
+//		return new Queue(MyRabbitMqConfig.queueName, false);
+//	} 
+//	 
+//    @Bean
+//    TopicExchange exchange() {
+//        return new TopicExchange(MyRabbitMqConfig.exchangeName);
+//    }
+//    
+//    @Bean
+//    Binding binding() {
+//        return BindingBuilder.bind(queue()).to(exchange()).with(MyRabbitMqConfig.keyName);
+//    }
     
     /**
      * 队列2
      * @return
      */
-    @Bean
-	Queue queue2() {
-		return new Queue(MyRabbitMqConfig.queueName2, false);
-	} 
-	 
-    @Bean
-    TopicExchange exchange2() {
-        return new TopicExchange(MyRabbitMqConfig.exchangeName2);
-    }
-    
-    @Bean
-    Binding binding2() {
-        return BindingBuilder.bind(queue()).to(exchange()).with(MyRabbitMqConfig.keyName2);
-    }
+//    @Bean
+//	Queue queue2() {
+//		return new Queue(MyRabbitMqConfig.queueName2, false);
+//	} 
+//	 
+//    @Bean
+//    TopicExchange exchange2() {
+//        return new TopicExchange(MyRabbitMqConfig.exchangeName2);
+//    }
+//    
+//    @Bean
+//    Binding binding2() {
+//        return BindingBuilder.bind(queue()).to(exchange()).with(MyRabbitMqConfig.keyName2);
+//    }
     
 //    @Bean
 //    Queue queue(String name) {

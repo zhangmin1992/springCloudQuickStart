@@ -1,5 +1,7 @@
 package com.zm.provider.mq;
 
+import java.util.ArrayList;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,34 +14,33 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "my.rabitmq")
 public class RabbitMqExchangeConfig {
 
-	private String queueList;
+	private ArrayList<String> queueList;
 
-	private String exchangeList;
+	private ArrayList<String> exchangeList;
 
-	private String bindingList;
+	private ArrayList<String> bindingList;
 
-	public String getQueueList() {
+	public ArrayList<String> getQueueList() {
 		return queueList;
 	}
 
-	public void setQueueList(String queueList) {
+	public void setQueueList(ArrayList<String> queueList) {
 		this.queueList = queueList;
 	}
 
-	public String getExchangeList() {
+	public ArrayList<String> getExchangeList() {
 		return exchangeList;
 	}
 
-	public void setExchangeList(String exchangeList) {
+	public void setExchangeList(ArrayList<String> exchangeList) {
 		this.exchangeList = exchangeList;
 	}
 
-	public String getBindingList() {
+	public ArrayList<String> getBindingList() {
 		return bindingList;
 	}
 
-	public void setBindingList(String bindingList) {
+	public void setBindingList(ArrayList<String> bindingList) {
 		this.bindingList = bindingList;
 	}
-
 }

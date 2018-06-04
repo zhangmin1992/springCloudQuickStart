@@ -45,16 +45,16 @@ public class ProviderApplication {
     	/**
     	 * 使用另外加载mq资源文件的方式
     	 */
-//         new SpringApplicationBuilder(ProviderApplication.class)
-//        .listeners(new LoadAdditionalProperties())  
-//        .run(args);
+         new SpringApplicationBuilder(ProviderApplication.class)
+        .listeners(new LoadAdditionalProperties())  
+        .run(args);
     	
     	/**
     	 * 使用指定yml或者资源文件的方式
     	 */
-    	ConfigurableApplicationContext context = new SpringApplicationBuilder(ProviderApplication.class)
-		.properties("spring.config.location=classpath:bootstrap.properties")
-		.run(args);
+//    	ConfigurableApplicationContext context = new SpringApplicationBuilder(ProviderApplication.class)
+//		.properties("spring.config.location=classpath:bootstrap.properties")
+//		.run(args);
     	
     }
 	
