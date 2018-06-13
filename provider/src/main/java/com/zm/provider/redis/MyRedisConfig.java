@@ -1,46 +1,46 @@
-package com.zm.provider.redis;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-/**
- * 跟资源文件相对应的类
- * @author yp-tc-m-7129
- *
- */
-@Component
-@ConfigurationProperties(prefix = "spring.redis")
-public class MyRedisConfig {
-
-	private String host;
-	
-	private int port;
-	
-	private int timeout;
-
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public int getTimeout() {
-		return timeout;
-	}
-
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
-	
-	
-}
+//package com.zm.provider.redis;
+//
+//import org.springframework.boot.context.properties.ConfigurationProperties;
+//import org.springframework.stereotype.Component;
+//
+///**
+// * 跟资源文件相对应的类
+// * @author yp-tc-m-7129
+// *
+// */
+//@Component
+//@ConfigurationProperties(prefix = "spring.redis")
+//public class MyRedisConfig {
+//
+//	private String host;
+//	
+//	private int port;
+//	
+//	private int timeout;
+//
+//	public String getHost() {
+//		return host;
+//	}
+//
+//	public void setHost(String host) {
+//		this.host = host;
+//	}
+//
+//	public int getPort() {
+//		return port;
+//	}
+//
+//	public void setPort(int port) {
+//		this.port = port;
+//	}
+//
+//	public int getTimeout() {
+//		return timeout;
+//	}
+//
+//	public void setTimeout(int timeout) {
+//		this.timeout = timeout;
+//	}
+//	
+//	
+//}

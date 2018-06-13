@@ -40,14 +40,14 @@ public class ProviderApplication {
     	/**
     	 * 使用默认的启动方式 properties文件会优先于yml文件
     	 */
-        //SpringApplication.run(ProviderApplication.class, args);
+        SpringApplication.run(ProviderApplication.class, args);
         
     	/**
     	 * 使用另外加载mq资源文件的方式
     	 */
-         new SpringApplicationBuilder(ProviderApplication.class)
-        .listeners(new LoadAdditionalProperties())  
-        .run(args);
+//         new SpringApplicationBuilder(ProviderApplication.class)
+//        .listeners(new LoadAdditionalProperties())  
+//        .run(args);
     	
     	/**
     	 * 使用指定yml或者资源文件的方式

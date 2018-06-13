@@ -22,8 +22,6 @@ import com.zm.provider.dao.PayEntityDao;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Pay;
 import com.zm.provider.mq.NeoSender;
-import com.zm.provider.redis.RedisUtils;
-import com.zm.provider.util.redis.RedisDistributeLock;
 import com.zm.provider.util.redis.RedisToolUtils;
 
 @RestController
@@ -43,8 +41,8 @@ public class HelloController {
     @Autowired
     private NeoSender neoSender;
     
-    @Autowired
-    private RedisUtils redisUtils;
+//    @Autowired
+//    private RedisUtils redisUtils;
 
     /**
      * 测试资源文件启动正常

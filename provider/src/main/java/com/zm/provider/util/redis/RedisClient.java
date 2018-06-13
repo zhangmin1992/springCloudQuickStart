@@ -151,6 +151,25 @@ public class RedisClient {
         String password = prop.getProperty("spring.redis.password");
         pool = new JedisPool(config, host, Integer.parseInt(portStr),Integer.parseInt(timeoutStr),password);
         LOGGER.info("init single redis pool success...");
+    	
+//    	LOGGER.info("init single redis pool start...");
+//        JedisPoolConfig config = initPoolConfig(prop);
+//        String host = prop.getProperty("spring.redis.host");
+//        String portStr = prop.getProperty("spring.redis.port");
+//        if(host == null || portStr == null
+//                || host.trim().length() == 0
+//                || portStr.trim().length() == 0){
+//            throw new RuntimeException("init single redis pool host and port must be specified ");
+//        }
+//        int database = 0;//默认为0
+//        String databaseStr = prop.getProperty("spring.redis.database");
+//        if(databaseStr != null && !"".equals(databaseStr.trim())){
+//            database = Integer.parseInt(databaseStr.trim());
+//        }
+//        String timeoutStr = prop.getProperty("spring.redis.timeout");
+//        String password = prop.getProperty("spring.redis.password");
+//        pool = new JedisPool(config, host, Integer.parseInt(portStr),Integer.parseInt(timeoutStr),password,database);
+//        LOGGER.info("init single redis pool success...");
     }
 
     /**

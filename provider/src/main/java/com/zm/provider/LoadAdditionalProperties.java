@@ -20,6 +20,10 @@ public class LoadAdditionalProperties implements ApplicationListener<Application
             Resource resource = loader.getResource("classpath:rabbitmq.properties");
             PropertySource<?> propertySource = new PropertySourcesLoader().load(resource);
             applicationEnvironmentPreparedEvent.getEnvironment().getPropertySources().addLast(propertySource);
+            
+            Resource resource2 = loader.getResource("classpath:redis-conf.properties");
+            PropertySource<?> propertySource2 = new PropertySourcesLoader().load(resource2);
+            applicationEnvironmentPreparedEvent.getEnvironment().getPropertySources().addLast(propertySource2);
         }catch(IOException e){
             throw new IllegalStateException(e);
         }
