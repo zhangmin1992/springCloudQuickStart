@@ -19,10 +19,50 @@
     where name = #{name,jdbcType=VARCHAR}
   </select>
   
+  <select id="getBookInfo" resultMap="BaseResultMap" parameterType="java.util.List" >
+    select name from payplus_test.book_test
+  </select>
+  
   <insert id="insertPay" parameterType="com.zm.provider.entity.Book">
- 		 INSERT INTO
-		 payplus_test.book_test (name,price,create_time) 
-		 VALUES (#{name,jdbcType=VARCHAR},#{price,jdbcType=VARCHAR},current_timestamp)
- 	</insert>
+	 INSERT INTO
+	 payplus_test.book_test (name,price,create_time) 
+	 VALUES (#{name,jdbcType=VARCHAR},#{price,jdbcType=VARCHAR},current_timestamp)
+ </insert>
+ 
+ <!-- 这种方式需要在资源文件那里打开批量操作 -->
+<!--  <update id="batchUpdateBookInfo" parameterType="java.util.List">
+  
+	<foreach collection="list" item="item" separator=";">
+		update book_test
+		set price = #{item.price,jdbcType=BIGINT}
+		where name = #{item.name,jdbcType=VARCHAR}
+	</foreach>
+</update> -->
+
+
+ <!-- 这种方式可以再一次数据库连接中更新数据，效率比较高 -->
+ <update id="batchUpdateBookInfo" parameterType="java.util.List">
+   update book_test
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="price =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.price !=null">
+                         when name=#{item.name} then #{item.price}
+                     </if>
+                 </foreach>
+            </trim>
+        </trim>
+        where name in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.name,jdbcType=VARCHAR}
+        </foreach>
+</update>
+
+<delete id="batchDelete" parameterType="java.util.List"> 
+	DELETE FROM book_test WHERE ID in  
+	<foreach item="item" index="index" collection="list" open="(" separator="," close=")"> 
+	   #{item} 
+	</foreach>
+</delete>
  
 </mapper>

@@ -1,12 +1,17 @@
 package com.test;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSONObject;
+import com.zm.provider.dao.BookEntityDao;
 import com.zm.provider.service.SendEmailService;
 import com.zm.provider.util.redis.RedisToolUtils;
+import com.zm.provider.vo.BookInfoVO;
 
 public class TestResource extends SpringbootJunitTest {
 
@@ -45,5 +50,39 @@ public class TestResource extends SpringbootJunitTest {
 	@Test
 	public void testEmail() throws Exception {
 		sendEmailService.sendHtmlSimpleMail();
+	}
+	
+	/**
+	 * 测试mybatis返回list会过滤掉一样的?完全不会
+	 */
+	@Autowired
+	private BookEntityDao bookEntityDao;
+	
+	@Test
+	public void testRedisLock() {
+		ArrayList<String> list = bookEntityDao.getBookInfo();
+		System.out.println("-----"+JSONObject.toJSONString(list));
+	}
+	
+	/**
+	 * 测试批量更新不同数据对应的不同
+	 */
+	@Test
+	public void testBatchupdate() {
+		ArrayList<BookInfoVO> list = new ArrayList<>();
+		BookInfoVO vo = new BookInfoVO();
+		vo.setName("222");
+		vo.setPrice(222);
+		list.add(vo);
+		BookInfoVO vo3 = new BookInfoVO();
+		vo3.setName("333");
+		vo3.setPrice(333);
+		list.add(vo3);
+		bookEntityDao.batchUpdateBookInfo(list);
+		
+//		ArrayList<String> list = new ArrayList<>();
+//		list.add("9");
+//		list.add("10");
+//		bookEntityDao.batchDelete(list);
 	}
 }

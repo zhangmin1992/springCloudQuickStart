@@ -3,6 +3,7 @@ package com.zm.spring.cloud.pptest_consumer.controller;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zm.provider.entity.Book;
@@ -15,7 +16,7 @@ import com.zm.provider.entity.Book;
  *
  */
 //声明调用的服务名称
-@FeignClient("HELLO-SERVICE")
+@FeignClient(name = "HELLO-SERVICE")
 public interface HelloFeignClient {
 	
 	@RequestMapping("/hello")
@@ -34,10 +35,21 @@ public interface HelloFeignClient {
 //	@RequestMapping(value = "/getBookForObject")
 //	Book getBookForObject(@RequestBody Book book,@RequestBody Pay pay);
 	
-	//错误写法
+	//不会报错
 	@RequestMapping(value = "/getBookForObject2")
 	Book getBookForObject2(@RequestBody Book book,@RequestParam(value ="id") String id);
 	
 	@RequestMapping("/timeOut")
     String timeOut();
+	
+	/**
+	 * 测试fegin传递一个复杂bean对象自动转为post请求
+	 * @param book
+	 * @return
+	 */
+	@RequestMapping(value = "/getBook")
+	Book getBook(@RequestParam(value ="name") String name);
+	
+	@RequestMapping(value = "/postBook",method = RequestMethod.POST)
+	Book postBook(@RequestBody Book book);
 }

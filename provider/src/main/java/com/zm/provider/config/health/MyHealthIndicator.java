@@ -1,4 +1,4 @@
-//package com.zm.provider.config;
+//package com.zm.provider.config.health;
 //
 //import org.springframework.boot.actuate.health.Health;
 //import org.springframework.boot.actuate.health.HealthIndicator;
@@ -15,6 +15,16 @@
 //public class MyHealthIndicator implements HealthIndicator {
 //
 //	/**
+//	 * 失效心跳数
+//	 */
+//	private static Integer errorCount = 50;
+//	
+//	/**
+//	 * 健康心跳数
+//	 */
+//	private static Integer count = 10;
+//	
+//	/**
 //	 * 不可用的心跳次数计数
 //	 */
 //	private int healthIndicatorErrorCount;
@@ -25,22 +35,22 @@
 //	private int healthIndicatorCount;
 //	
 //	/**
-//	 * 服务是否可用
+//	 * 服务是否可用，false表示可用
 //	 */
-//	private boolean hasError=false;
+//	private boolean hasError = false;
 //
 //	@Override
 //	public Health health() {
 //		if(!hasError){
 //			healthIndicatorCount++;
 //			//每检测5次，就返回DOWN
-//			if(healthIndicatorCount %5 ==0){
+//			if(healthIndicatorCount % count ==0){
 //				hasError = true;
 //			}
 //		}else{
 //			//DOWN计数10次就UP
 //			healthIndicatorErrorCount++;
-//			if(healthIndicatorErrorCount > 5){
+//			if(healthIndicatorErrorCount > errorCount){
 //				hasError=false;
 //				healthIndicatorErrorCount=0;
 //			}

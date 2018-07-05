@@ -2,6 +2,7 @@ package com.zm.spring.cloud.pptest_consumer.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -10,15 +11,18 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSONObject;
 import com.netflix.hystrix.HystrixCircuitBreaker;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -29,6 +33,7 @@ import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Pay;
+import com.zm.spring.cloud.consumer.config.loadbalance.MyRibbonConfiguration;
 import com.zm.spring.cloud.pptest_consumer.service.CallService;
 import com.zm.spring.cloud.pptest_consumer.service.HelloService;
 
@@ -50,6 +55,7 @@ public class ConsumerController {
     
     @Autowired
     private HelloFeignClient helloFeignClient;
+    
     
     @Autowired
     private HelloService helloService;
@@ -407,6 +413,7 @@ public class ConsumerController {
     	return helloFeignClient.hello();
     }
     
+   
     /**
      * 测试Feign有参数调用提供者
      * @return
@@ -498,5 +505,39 @@ public class ConsumerController {
     	}
         System.out.println("断路器状态：" + breaker.isOpen());
         return "ok";
+    }
+    
+    @RequestMapping(value = "/getBook", method = RequestMethod.GET,consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	void getBook() {
+    	Book book2 = new  Book();
+    	book2.setId(11);
+    	book2.setName("enen");
+    	book2.setCreateTime(new Date());
+    	book2.setPrice(890);
+    	Book resultBook =  helloFeignClient.getBook("name="+"enen");
+    	System.out.println(JSONObject.toJSONString(resultBook));
+    }
+    
+    @RequestMapping(value = "/postBook",method = RequestMethod.GET)
+	void postBook() {
+    	Book book2 = new  Book();
+    	book2.setId(11);
+    	book2.setName("enen");
+    	book2.setCreateTime(new Date());
+    	book2.setPrice(890);
+    	Book resultBook =  helloFeignClient.postBook(book2);
+    	System.out.println(JSONObject.toJSONString(resultBook));
+    }
+    
+    @RequestMapping(value="/getList")
+    public List<Book> getList() {
+//    	Book[] bookArray =  this.restTemplate.getForObject("http://HELLO-SERVICE/getList",Book[].class);
+//    	List<Book> list = Arrays.asList(bookArray);
+//    	System.out.println(JSONObject.toJSONString(list));
+//    	return list;
+    	
+    	List<Book> list =  this.restTemplate.getForObject("http://HELLO-SERVICE/getList",List.class);
+    	System.out.println(JSONObject.toJSONString(list));
+    	return list;
     }
 }

@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @MapperScan("com.zm.provider.dao")
@@ -27,7 +24,7 @@ public class ProviderApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderApplication.class);
 	
 	/**
-	 * 健康检查器，用于监控mq redis等第三方组件的可用性，发现并没有多大卵用，并不会阻止消费者调用到提供者上去
+	 * 健康检查器，用于监控mq redis等第三方组件的可用性
 	 * @return
 	 */
 	/*@Bean

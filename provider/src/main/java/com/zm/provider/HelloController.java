@@ -1,5 +1,6 @@
 package com.zm.provider;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -109,12 +112,12 @@ public class HelloController {
      * @param book
      * @return
      */
-    @RequestMapping(value = "/getBook", method = RequestMethod.GET)
-    public Book getBook(@RequestBody Book book) {
-    	logger.info("----- HelloController getBook, book=" + JSONObject.toJSONString(book));
-    	book.setName("哈哈你过来了");
-        return book;
-    }
+//    @RequestMapping(value = "/getBook", method = RequestMethod.GET)
+//    public Book getBook(@RequestBody Book book) {
+//    	logger.info("----- HelloController getBook, book=" + JSONObject.toJSONString(book));
+//    	book.setName("哈哈你过来了");
+//        return book;
+//    }
     
     /**
      * 单实体参数返回实体
@@ -144,6 +147,29 @@ public class HelloController {
     }
     
     /**
+     * 测试复杂bean会转化为post请求
+     * @param book
+     * @return
+     */
+    @RequestMapping(value = "/getBook",method = RequestMethod.GET)
+    public Book getBook(String name) {
+    	logger.info("----- HelloController  book=" + JSONObject.toJSONString(name));
+    	Book book2 = new  Book();
+    	book2.setId(11);
+    	book2.setName("说谎get");
+    	book2.setCreateTime(new Date());
+    	book2.setPrice(890);
+        return book2;
+    }
+    
+    @RequestMapping(value = "/postBook",method = RequestMethod.POST)
+	public Book postBook(@RequestBody Book book) {
+    	logger.info("----- HelloController  postBook=" + JSONObject.toJSONString(book));
+    	book.setName("说谎post");
+        return book;
+    }
+    
+    /**
      * 这种支持
      * @param book
      * @param id
@@ -161,7 +187,7 @@ public class HelloController {
      * @param id
      * @return
      */
-    @RequestMapping(value="mybatatisgetBook")
+    @RequestMapping(value="/mybatatisgetBook")
     public Book mybatatisgetBook(Long id) {
     	logger.info("----- HelloController mybatatisgetBook,id= "+id);
     	Book book = bookEntityDao.getBook(id);
@@ -175,7 +201,7 @@ public class HelloController {
      * @return
      */
     @Transactional
-    @RequestMapping(value="testTransaction")
+    @RequestMapping(value="/testTransaction")
     public String testTransaction() {
     	logger.info("----- HelloController testTransaction");
     	Pay pay = new Pay(1, "zm", 2, new Date());
@@ -190,7 +216,7 @@ public class HelloController {
     	return "yes";
     }
    
-    @RequestMapping(value="timeOut")
+    @RequestMapping(value="/timeOut")
     public String timeOut() {
     	logger.info("timeOut我进入了服务提供者。。。。");
     	try {
@@ -207,7 +233,7 @@ public class HelloController {
      * @param param
      * @return
      */
-    @RequestMapping(value="testZzul")
+    @RequestMapping(value="/testZzul")
     public String testZzul(String param) {
     	try {
     		logger.info("我进入了服务提供者。。。。");
@@ -223,7 +249,7 @@ public class HelloController {
     /**
      * 测试整合mq收发消息
      */
-    @RequestMapping(value="testMQ")
+    @RequestMapping(value="/testMQ")
     public void testMQ() {
     	logger.info("---开始准备发送mq消息");
     	neoSender.send("2018-01-01");
@@ -244,7 +270,7 @@ public class HelloController {
     /**
      * 测试redis整合，工具类方式
      */
-    @RequestMapping(value="testRedisLock")
+    @RequestMapping(value="/testRedisLock")
     public void testRedisLock() {
     	logger.info("---开始测试分布式锁");
     	
@@ -307,9 +333,19 @@ public class HelloController {
 	}*/
 	 
 	 //测试获取统一配置的值
-	@RequestMapping(value="getMyName3")
+	@RequestMapping(value="/getMyName3")
     public String getMyName3() {
 		return "";
+	}
+	
+	@RequestMapping(value="/getList")
+    public List<Book> getList() {
+		List<Book> list = new ArrayList<Book>();
+		Book book = new Book(1, "zm", 2, new Date());
+		Book book2 = new Book(2, "zhangmin", 3, new Date());
+		list.add(book);
+		list.add(book2);
+		return list;
 	}
     
 }
