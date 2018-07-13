@@ -5,6 +5,11 @@ import java.util.Date;
 
 public class Book  implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4229064185489550373L;
+
 	private Integer id;
 	
 	private String name;

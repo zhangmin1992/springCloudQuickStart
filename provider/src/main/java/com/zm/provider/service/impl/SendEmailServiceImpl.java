@@ -52,7 +52,7 @@ public class SendEmailServiceImpl implements SendEmailService {
 		String [] receiveArray = email.getEmail();
 		MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom("2413172711@qq.com");
+        helper.setFrom("m18701365103_4@163.com");
         helper.setTo(receiveArray[0]);
         helper.setSubject("301对账文件"+fileName);
         helper.setText("301对账文件见附件",true);
@@ -74,6 +74,7 @@ public class SendEmailServiceImpl implements SendEmailService {
 		LOGGER.info("准备发送HTML邮件");
 		MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        //这里设置企业邮箱突然间不可以用了，可能是端口拦截了，可能是企业邮箱拦截了
         helper.setFrom("2413172711@qq.com");
         helper.setTo("2413172711@qq.com");
         helper.setSubject("HTML主题");

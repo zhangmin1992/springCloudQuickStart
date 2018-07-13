@@ -158,6 +158,12 @@ public class ConsumerController {
         return responseEntity;
     }
     
+    @RequestMapping("/testHystrix")
+    @HystrixCommand(fallbackMethod = "error")
+    public String testHystrix(String param) {
+    	return restTemplate.getForEntity("http://HELLO-SERVICE/testZzul?param={1}",String.class,param).getBody();
+    }
+    
     /**
      * Hystrix断路器的短路机制
      * 方法上通过@HystrixCommand注解来指定请求失败时回调的方法,跳转方法不能再用@RequestMapping声明了

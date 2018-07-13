@@ -6,9 +6,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zm.provider.dao.BookEntityDao;
+import com.zm.provider.mq.NeoSender;
 import com.zm.provider.service.SendEmailService;
 import com.zm.provider.util.redis.RedisToolUtils;
 import com.zm.provider.vo.BookInfoVO;
@@ -85,4 +87,16 @@ public class TestResource extends SpringbootJunitTest {
 //		list.add("10");
 //		bookEntityDao.batchDelete(list);
 	}
+	
+	/**
+     * 测试整合mq收发消息
+     */
+	@Autowired
+	private NeoSender neoSender;
+	
+    @Test
+    public void testMQ() {
+    	logger.info("---开始准备发送mq消息");
+    	neoSender.send("2018-03-01");
+    }
 }
