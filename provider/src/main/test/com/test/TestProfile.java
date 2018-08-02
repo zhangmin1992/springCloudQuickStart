@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zm.provider.HelloController;
 import com.zm.provider.dao.BookEntityDao;
 import com.zm.provider.dao.PayEntityDao;
@@ -174,4 +176,41 @@ public class TestProfile extends SpringbootJunitTest {
 			}
     	}
     }
+	
+	@Test
+	public void testCache() {
+		logger.info("---开始测试testCache");
+		System.out.println(testInsertService.getCacheStr());
+	}
+	
+	/**
+	 * 测试mybatis返回map,并且把返回的值设置成驼峰模式的
+	 * 方式一：不用任何配置类，修改xml文件
+	 * 在xml里面写这个
+	 *  <resultMap id="myResultMap"  type="HashMap">  
+		    <result property="name" column="name" />  
+		    <result property="createTime" column="create_time" />  
+  	    </resultMap>
+  	    <select id="getPayInfo" parameterType="java.lang.String" resultMap="myResultMap">
+	 	  select name,create_time from pay_test where name = #{name,jdbcType=VARCHAR}
+	 	</select>
+	 	方式二：增加资源文件属性，并且增加配置类，xml文件中这样写，适用于所有的返回map的东西
+	 	<select id="getPayInfo" parameterType="java.lang.String" resultType="java.util.Map">
+	 	  select name,create_time from pay_test where name = #{name,jdbcType=VARCHAR}
+	 	</select>
+	 	资源文件增加配置：将map转为驼峰模式配置true，
+	 	mybatis.configuration.map-underscore-to-camel-case=true
+	 	增加配置类：com.zm.provider.util.tuofeng下的文件
+	 */
+	@Test
+	public void getPayInfo() {
+		Map<String, String> resultMap = payEntityDao.getPayInfo("zm");
+		System.out.println("-----"+JSONObject.toJSONString(resultMap));
+	}
+	
+	@Test
+	public void getNameList() {
+		List<String> resultMap = payEntityDao.getNameList();
+		System.out.println("-----"+JSONObject.toJSONString(resultMap));
+	}
 }

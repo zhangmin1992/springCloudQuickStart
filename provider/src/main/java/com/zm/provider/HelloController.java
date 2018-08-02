@@ -196,13 +196,13 @@ public class HelloController {
     }
     
     /**
-     * 测试事务
      * @param name
      * @return
      */
     @Transactional
     @RequestMapping(value="/testTransaction")
     public String testTransaction() {
+    	//吗
     	logger.info("----- HelloController testTransaction");
     	Pay pay = new Pay(1, "zm", 2, new Date());
     	Book book = new Book(1, "zm", 2, new Date());
@@ -338,6 +338,7 @@ public class HelloController {
 		return "";
 	}
 	
+	//
 	@RequestMapping(value="/getList")
     public List<Book> getList() {
 		List<Book> list = new ArrayList<Book>();

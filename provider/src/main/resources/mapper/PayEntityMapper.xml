@@ -9,9 +9,22 @@
     <result column="NAME" property="name" jdbcType="VARCHAR" />
   </resultMap>
   
+  <!-- <resultMap id="myResultMap"  type="HashMap">  
+	    <result property="name" column="name" />  
+	    <result property="createTime" column="create_time" />  
+  	   </resultMap>  -->
+
  	<insert id="insertPay" parameterType="com.zm.provider.entity.Pay">
  		 INSERT INTO
 		 payplus_test.pay_test (name,price,create_time) 
 		 VALUES (#{name,jdbcType=VARCHAR},#{price,jdbcType=VARCHAR},current_timestamp)
  	</insert>
+ 	
+ 	<select id="getPayInfo" parameterType="java.lang.String" resultType="java.util.Map">
+ 	  select name,create_time from pay_test where name = #{name,jdbcType=VARCHAR}
+ 	</select>
+ 	
+ 	<select id="getNameList" resultType="java.util.Map">
+ 	  select name from pay_test where 1=1
+ 	</select>
 </mapper>

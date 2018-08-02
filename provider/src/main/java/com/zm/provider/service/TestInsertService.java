@@ -12,5 +12,7 @@ public interface TestInsertService {
 	
 	List<TestInsertEntity> getInsertInfo();
 	
+	String getCacheStr();
+	
 	void batchDelete(List<TestInsertEntity> list);
 }
