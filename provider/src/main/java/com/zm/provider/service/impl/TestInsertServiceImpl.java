@@ -13,6 +13,7 @@ import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_retur
 import com.zm.provider.dao.TestInsertEntityDao;
 import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.service.TestInsertService;
+import com.zm.provider.util.aop.MyAspect;
 import com.zm.provider.util.redis.RedisToolUtils;
 
 @Service
@@ -51,14 +52,10 @@ public class TestInsertServiceImpl implements TestInsertService {
 	}
 
 	@Override
-	public String getCacheStr() {
-		Object result = RedisToolUtils.get("getCacheStr");
-		if(result == null) {
-			System.out.println("要查库了");
-			result = testInsertEntityDao.getCacheStr();
-			RedisToolUtils.set("getCacheStr",(String)result, "NX", "PX", 8000 * 60);
-		}
-		return (String)result;
+	@MyAspect(expireTime=5000)
+	public TestInsertEntity getCacheStr(String name,String age) {
+		System.out.println("要查库了"+name+age);
+		return testInsertEntityDao.getCacheStr();
 	}
 
 }

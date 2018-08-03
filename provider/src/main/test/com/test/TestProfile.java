@@ -177,10 +177,15 @@ public class TestProfile extends SpringbootJunitTest {
     	}
     }
 	
+	/**
+	 * 自定义缓存注解的测试，在方法上标记了这个注解，可以设置有效期，根据唯一key,第一次查出来存缓存第二次直接取缓存
+	 */
 	@Test
 	public void testCache() {
 		logger.info("---开始测试testCache");
-		System.out.println(testInsertService.getCacheStr());
+		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
+		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
+		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","3")));
 	}
 	
 	/**

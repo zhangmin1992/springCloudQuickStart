@@ -18,5 +18,5 @@ public interface TestInsertEntityDao {
 	
 	void batchDelete(List<TestInsertEntity> list);
 	
-	String getCacheStr();
+	TestInsertEntity getCacheStr();
 }

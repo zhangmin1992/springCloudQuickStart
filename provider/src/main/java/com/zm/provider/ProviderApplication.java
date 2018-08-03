@@ -5,17 +5,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @MapperScan("com.zm.provider.dao")
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableTransactionManagement
+@EnableAspectJAutoProxy
 /**
  *@MapperScan  mybatis扫描包地址
  *@EnableDiscoveryClient 服务注册和发现
  *@SpringBootApplication 启动类
  *@EnableTransactionManagement 开启事务
+ *@EnableAspectJAutoProxy 开启aop动态代理
  * @author yp-tc-m-7129
  *
  */

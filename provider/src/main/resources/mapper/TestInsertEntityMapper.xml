@@ -30,8 +30,8 @@
       </foreach>    
 	</delete>
 	
-	<select id="getCacheStr" resultType="java.lang.String">
-	  select name from  test_insert where id =1
+	<select id="getCacheStr" resultMap="BaseResultMap">
+	  select * from  test_insert where id =1
 	</select>
  
 </mapper>
