@@ -33,5 +33,25 @@
 	<select id="getCacheStr" resultMap="BaseResultMap">
 	  select * from  test_insert where id =1
 	</select>
+	
+	<select id="updateInfo" resultType="long" parameterType="java.util.Map">
+	   update  test_insert  set name = #{newName,jdbcType=VARCHAR} 
+	   and id = #{id,jdbcType=VARCHAR}
+	   where name = #{oldName,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="testBatchDelete" parameterType = "java.util.List">    
+	  delete from test_insert where id in
+	  <foreach collection="list" item ="model" open="(" separator="," close=")">
+           #{model.id,jdbcType=VARCHAR}   
+      </foreach> 
+	</delete>
+	
+	<select id="getBatchInfo" resultMap="BaseResultMap" parameterType="java.util.Map">
+	 select * from test_insert where 1=1 limit ${(pageNum-1) * pagesize},${pageNum * pagesize}
+	</select>
+	
+	<select id="wojuedenizaichawogujishiyaoniewole"></select>
+	
  
 </mapper>

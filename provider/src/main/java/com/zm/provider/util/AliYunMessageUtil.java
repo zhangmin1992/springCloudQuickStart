@@ -21,13 +21,18 @@ public class AliYunMessageUtil {
     //产品域名,开发者无需替换
     static final String domain = "dysmsapi.aliyuncs.com";
     
-	private static final String accessKeyId = "LTAI91S0AxsFHNP0";
+    //accessKeyId，需要替换
+	private static final String accessKeyId = "保密";
 	
-    private static final String accessKeySecret = "bII9JO4sac70xRy7NSvB61kIEqpfHp";
+	//密码需要替换
+    private static final String accessKeySecret = "保密";
     
+    //发送验证码
     public static SendSmsResponse sendSms() throws ClientException {
 
-        //可自助调整超时时间
+    	Integer math=(int)(Math.random()*9000)+1000;
+        
+    	//可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
@@ -41,17 +46,17 @@ public class AliYunMessageUtil {
         //必填:待发送手机号
         request.setPhoneNumbers("18701365103");
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName("追剧吧");
+        request.setSignName("张敏");
         //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_135805469");
+        request.setTemplateCode("SMS_141597754");
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"name\":\"张敏\", \"movieName\":\"犯人就是你\",\"num\":\"8\"}");
+        request.setTemplateParam("{\"code\":\""+math+"\"}");
 
         //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
         //request.setSmsUpExtendCode("90997");
 
         //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-        request.setOutId("yourOutId");
+        //request.setOutId("yourOutId");
 
         //hint 此处可能会抛出异常，注意catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
@@ -100,15 +105,15 @@ public class AliYunMessageUtil {
 
         //发短信
         SendSmsResponse response = sendSms();
-        System.out.println("短信接口返回的数据----------------");
+        System.out.println("解析短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());
         System.out.println("RequestId=" + response.getRequestId());
         System.out.println("BizId=" + response.getBizId());
 
         Thread.sleep(3000L);
-      //查明细
-      if(response.getCode() != null && response.getCode().equals("OK")) {
+       //查明细
+       if(response.getCode() != null && response.getCode().equals("OK")) {
             QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(response.getBizId());
             System.out.println("短信明细查询接口返回数据----------------");
             System.out.println("Code=" + querySendDetailsResponse.getCode());

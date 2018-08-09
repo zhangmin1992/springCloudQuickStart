@@ -13,16 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zm.provider.HelloController;
 import com.zm.provider.dao.BookEntityDao;
 import com.zm.provider.dao.PayEntityDao;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Email;
-import com.zm.provider.entity.Pay;
 import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.mq.RabbitMq;
 import com.zm.provider.service.ExcelService;
@@ -31,6 +27,8 @@ import com.zm.provider.service.SendEmailService;
 import com.zm.provider.service.TestInsertService;
 import com.zm.provider.util.CheckUtils;
 import com.zm.provider.util.redis.RedisToolUtils;
+import com.zm.provider.util.sms.AliyunSmsCodeProperties;
+import com.zm.provider.util.sms.SmsService;
 
 @ActiveProfiles("dev")
 public class TestProfile extends SpringbootJunitTest {
@@ -57,6 +55,12 @@ public class TestProfile extends SpringbootJunitTest {
 	
 	@Autowired
 	private ExcelService excelService;
+	
+	@Autowired
+	private SmsService smsService;
+	
+	@Autowired
+	private AliyunSmsCodeProperties properties;
 	
 	/**
 	 * 测试多环境配置资源文件
@@ -217,5 +221,14 @@ public class TestProfile extends SpringbootJunitTest {
 	public void getNameList() {
 		List<String> resultMap = payEntityDao.getNameList();
 		System.out.println("-----"+JSONObject.toJSONString(resultMap));
+	}
+	
+	/**
+	 * 阿里云平台发送短信
+	 */
+	@Test
+	public void testSms() {
+		//System.out.println("======="+properties.getAccessKeyId());
+		smsService.sendSmsCode("18701365103");
 	}
 }
