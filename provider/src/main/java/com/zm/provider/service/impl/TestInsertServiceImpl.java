@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.netflix.infix.lang.infix.antlr.EventFilterParser.null_predicate_return;
 import com.zm.provider.dao.TestInsertEntityDao;
 import com.zm.provider.entity.TestInsertEntity;
+import com.zm.provider.redis.xianliu.RateLimiter;
 import com.zm.provider.service.TestInsertService;
 import com.zm.provider.util.aop.MyAspect;
 import com.zm.provider.util.redis.RedisToolUtils;
@@ -53,6 +54,7 @@ public class TestInsertServiceImpl implements TestInsertService {
 
 	@Override
 	@MyAspect(expireTime=5000)
+	//@RateLimiter(limit = 2,timeout=6000)
 	public TestInsertEntity getCacheStr(String name,String age) {
 		System.out.println("要查库了"+name+age);
 		return testInsertEntityDao.getCacheStr();

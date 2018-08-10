@@ -6,6 +6,11 @@ public class MyException extends PayplusBizException {
      * 未知异常
      */
     public static MyException REMIT_UNKOWN_EXCEPTION = new MyException("000001");
+    
+    /**
+     * 请求过于频繁
+     */
+    public static MyException REQUEST_NOT_ALLOWED = new MyException("000002");
 
     
     public MyException(){}

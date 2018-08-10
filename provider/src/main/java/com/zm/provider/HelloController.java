@@ -338,7 +338,7 @@ public class HelloController {
 		return "";
 	}
 	
-	//
+	
 	@RequestMapping(value="/getList")
     public List<Book> getList() {
 		List<Book> list = new ArrayList<Book>();

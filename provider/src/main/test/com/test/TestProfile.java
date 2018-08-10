@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -19,10 +20,12 @@ import com.zm.provider.dao.BookEntityDao;
 import com.zm.provider.dao.PayEntityDao;
 import com.zm.provider.entity.Book;
 import com.zm.provider.entity.Email;
+import com.zm.provider.entity.Pay;
 import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.mq.RabbitMq;
 import com.zm.provider.service.ExcelService;
 import com.zm.provider.service.LegalHolidaysService;
+import com.zm.provider.service.PayEntityService;
 import com.zm.provider.service.SendEmailService;
 import com.zm.provider.service.TestInsertService;
 import com.zm.provider.util.CheckUtils;
@@ -40,6 +43,9 @@ public class TestProfile extends SpringbootJunitTest {
 	
 	@Autowired
 	private PayEntityDao payEntityDao;
+	
+	@Autowired
+	private PayEntityService payEntityService;
 	
 	@Autowired
     private JavaMailSender mailSender;
@@ -190,6 +196,26 @@ public class TestProfile extends SpringbootJunitTest {
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","3")));
+	}
+	
+	/**
+	 * redis分布式限流
+	 */
+	@Test
+	public void testLimit() {
+		logger.info("---开始测试redis分布式限流");
+		/*Pay pay = new Pay("zm", 11, new Date());
+		payEntityService.insertPay(pay);
+		payEntityService.insertPay(pay);
+		payEntityService.insertPay(pay);
+		payEntityService.insertPay(pay);*/
+		try {
+			TimeUnit.SECONDS.sleep(120);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("---------我结束了！");
 	}
 	
 	/**

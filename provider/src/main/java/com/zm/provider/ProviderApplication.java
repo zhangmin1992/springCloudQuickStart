@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
+import com.zm.provider.redis.xianliu.RedisQueueListener;
+import com.zm.provider.redis.xianliu.MyRedisQueueListener;
 @MapperScan("com.zm.provider.dao")
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -24,6 +26,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 public class ProviderApplication {
     
+	/*@Bean(initMethod="init")
+	public RedisQueueListener RedisQueueListener() {
+		return new RedisQueueListener();
+	}*/
+	
+	@Bean(initMethod="init")
+	public MyRedisQueueListener MyRedisQueueListener() {
+		return new MyRedisQueueListener();
+	}
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderApplication.class);
 	
 	/**
