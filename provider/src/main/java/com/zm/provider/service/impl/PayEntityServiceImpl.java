@@ -14,6 +14,9 @@ public class PayEntityServiceImpl implements PayEntityService {
 	@Autowired
 	private PayEntityDao payEntityDao;
 	
+	/**
+	 * redis限流的注解，6000毫秒内最多访问2次，第3次会被拒绝
+	 */
 	@RateLimiter(limit = 2,timeout=6000)
 	public void insertPay(Pay pay) {
 		payEntityDao.insertPay(pay);

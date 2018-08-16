@@ -59,8 +59,10 @@ public class RedisQueueListener {
 	public class QueueListener implements Runnable {
 		@Override
 		public void run() {
+			//while(true) 一旦启动就会持续执行，直到非守护线程全部终止
 			while(true) {
 				try {
+					//从阻塞队列中取数据
 					String obj = (String) billQueue.peek();
 					if (!CheckUtils.isEmpty(obj)) {
 						System.out.println("等待队列发现数据"+ JSONObject.toJSONString(obj));
