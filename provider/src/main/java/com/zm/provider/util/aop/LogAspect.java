@@ -1,19 +1,17 @@
 package com.zm.provider.util.aop;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.zm.provider.util.redis.RedisToolUtils;
-
-import java.lang.reflect.Method;
 /**
  * 注意除了标记切面外，还要标记切面被spring容器加载
  * 注意pointcut小写

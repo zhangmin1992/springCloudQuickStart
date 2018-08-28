@@ -546,4 +546,19 @@ public class ConsumerController {
     	System.out.println(JSONObject.toJSONString(list));
     	return list;
     }
+    
+    @RequestMapping(value="/testHystrixForSeparte")
+    public String testHystrixForSeparte(String param) {
+    	MyHystrixCommand myHystrixCommand1 = new MyHystrixCommand("2",restTemplate);
+        String resultString = myHystrixCommand1.execute();
+        
+        for(int i=0;i<20;i++) {
+        	new Thread(new Runnable() {
+				public void run() {
+					new MyHystrixCommand("25",restTemplate).execute();
+				}
+			}).start();
+        }
+        return resultString;
+    }
 }

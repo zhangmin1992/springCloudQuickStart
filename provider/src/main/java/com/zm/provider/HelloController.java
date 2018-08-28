@@ -235,15 +235,17 @@ public class HelloController {
      */
     @RequestMapping(value="/testZzul")
     public String testZzul(String param) {
+    	int num = 0;
     	try {
     		logger.info("我进入了服务提供者。。。。");
 	    	int paramInt = Integer.parseInt(param);
-	    	int num = 100 / paramInt;
+	    	num = 100 / paramInt;
+	    	logger.info("返回值 num={}",num);
+	    	Thread.sleep(300);
     	} catch (Exception e) {
     		logger.info("testZzul provider has exception " + e);
-    		throw e;
     	}
-    	return "ok";
+    	return String.valueOf(num);
     }
     
     /**
