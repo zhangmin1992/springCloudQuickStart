@@ -4,10 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import com.zm.provider.redis.xianliu.RedisQueueListener;
 import com.zm.provider.redis.xianliu.MyRedisQueueListener;
 @MapperScan("com.zm.provider.dao")
@@ -15,6 +20,7 @@ import com.zm.provider.redis.xianliu.MyRedisQueueListener;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
+@EnableCaching
 /**
  *@MapperScan  mybatis扫描包地址
  *@EnableDiscoveryClient 服务注册和发现
@@ -26,17 +32,22 @@ import com.zm.provider.redis.xianliu.MyRedisQueueListener;
  */
 public class ProviderApplication {
     
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderApplication.class);
+	
+	/**
+	 * 项目启动监听redis
+	 * @param bean
+	 * @return
+	 */
 	/*@Bean(initMethod="init")
 	public RedisQueueListener RedisQueueListener() {
 		return new RedisQueueListener();
 	}*/
 	
-	@Bean(initMethod="init")
+	/*@Bean(initMethod="init")
 	public MyRedisQueueListener MyRedisQueueListener() {
 		return new MyRedisQueueListener();
-	}
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProviderApplication.class);
+	}*/
 	
 	/**
 	 * 健康检查器，用于监控mq redis等第三方组件的可用性

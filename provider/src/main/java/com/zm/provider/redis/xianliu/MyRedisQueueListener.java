@@ -39,7 +39,7 @@ public class MyRedisQueueListener {
 							TimeUnit.SECONDS.sleep(60);
 						}
 					} catch (Throwable e) {
-						System.out.println("发生异常");
+						System.out.println("发生异常"+e);
 					}
 				}
 			}

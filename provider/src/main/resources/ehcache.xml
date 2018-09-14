@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd">
+    <!-- defaultCache中 eternal为true表示用不过去
+    maxElementsInMemory：缓存最大个数。
+    timeToIdleSeconds 对象多久不被访问就会过期，被自动销毁，默认值是0，也就是可闲置时间无穷大
+    timeToLiveSeconds 当缓存存活n秒后销毁
+    overflowToDisk：true表示 当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中
+    memoryStoreEvictionPolicy 缓存清除策略，最近最少使用
+    -->
+    <defaultCache 
+    	eternal="false" 
+    	maxElementsInMemory="1000" 
+    	overflowToDisk="false" 
+    	diskPersistent="false"
+        timeToIdleSeconds="0" 
+        timeToLiveSeconds="3600" 
+        memoryStoreEvictionPolicy="LRU" />
+     
+    <diskStore path="java.io.tmpdir" />    
+    <cache name="content"
+           maxEntriesLocalHeap="200"
+           timeToLiveSeconds="3600"
+           eternal="false" 
+	    	maxElementsInMemory="1000" 
+	    	overflowToDisk="false" 
+	    	diskPersistent="false"
+	        timeToIdleSeconds="0" 
+	        memoryStoreEvictionPolicy="LRU">
+    </cache>
+</ehcache>  

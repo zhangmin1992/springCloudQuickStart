@@ -31,7 +31,7 @@
 	</delete>
 	
 	<select id="getCacheStr" resultMap="BaseResultMap">
-	  select * from  test_insert where id =1
+	  select * from  test_insert where id ='feb997a7eaff4502914968b84ff95c25'
 	</select>
 	
 	<select id="updateInfo" resultType="long" parameterType="java.util.Map">

@@ -29,7 +29,7 @@ public interface TestInsertEntityDao {
 	
 	void batchDelete(List<TestInsertEntity> list);
 	
-	TestInsertEntity getCacheStr();
+	public TestInsertEntity getCacheStr();
 	
 	long updateInfo(@Param("id") String id,@Param("oldName") String oldName,@Param("newName") String newName);
 }

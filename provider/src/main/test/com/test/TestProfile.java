@@ -28,6 +28,7 @@ import com.zm.provider.service.LegalHolidaysService;
 import com.zm.provider.service.PayEntityService;
 import com.zm.provider.service.SendEmailService;
 import com.zm.provider.service.TestInsertService;
+import com.zm.provider.service.TestInsertService2;
 import com.zm.provider.util.CheckUtils;
 import com.zm.provider.util.redis.RedisToolUtils;
 import com.zm.provider.util.sms.AliyunSmsCodeProperties;
@@ -58,6 +59,9 @@ public class TestProfile extends SpringbootJunitTest {
 	
 	@Autowired
 	private TestInsertService testInsertService;
+	
+	@Autowired
+	private TestInsertService2 testInsertService2;
 	
 	@Autowired
 	private ExcelService excelService;
@@ -196,6 +200,17 @@ public class TestProfile extends SpringbootJunitTest {
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","2")));
 		System.out.println(JSONObject.toJSONString(testInsertService.getCacheStr("1","3")));
+	}
+	
+	/**
+	 * springboot整合enchache的测试
+	 */
+	@Test
+	public void testCache2() {
+		logger.info("---开始测试testEnCache");
+		System.out.println(JSONObject.toJSONString(testInsertService2.getEnCacheStr("1","1")));
+		System.out.println(JSONObject.toJSONString(testInsertService2.getEnCacheStr("1","2")));
+		System.out.println(JSONObject.toJSONString(testInsertService2.getEnCacheStr("2","2")));
 	}
 	
 	/**
