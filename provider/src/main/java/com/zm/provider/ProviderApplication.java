@@ -5,22 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.zm.provider.redis.xianliu.RedisQueueListener;
-import com.zm.provider.redis.xianliu.MyRedisQueueListener;
 @MapperScan("com.zm.provider.dao")
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 @EnableCaching
+@EnableKafka
 /**
  *@MapperScan  mybatis扫描包地址
  *@EnableDiscoveryClient 服务注册和发现
@@ -57,7 +52,8 @@ public class ProviderApplication {
 	public MyHealthIndicator myHealthIndicator(){
 		return new MyHealthIndicator();
 	}*/
-
+	
+	
     public static void main(String[] args) {
     	
     	/**

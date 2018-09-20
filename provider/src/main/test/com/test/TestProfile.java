@@ -270,6 +270,17 @@ public class TestProfile extends SpringbootJunitTest {
 	@Test
 	public void testSms() {
 		//System.out.println("======="+properties.getAccessKeyId());
-		smsService.sendSmsCode("18701365103");
+		//smsService.sendSmsCode("18701365103");
+	}
+	
+	@Test
+	public void testKafka() {
+		System.out.println("准备测试队列发送消息");
+		testInsertService2.testKafka();
+	}
+	
+	@Test
+	public void testKafka2(){
+		
 	}
 }

@@ -2,15 +2,20 @@ package com.zm.provider.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.zm.provider.dao.TestInsertEntityDao;
 import com.zm.provider.entity.TestInsertEntity;
 import com.zm.provider.service.TestInsertService2;
 
+
 @Service("testInsertService2")
 public class TestInsertServiceImpl2 implements TestInsertService2 {
 
+	@Autowired
+    private KafkaTemplate kafkaTemplate;
+	
     @Autowired
     private TestInsertEntityDao testInsertEntityDao;
 	
@@ -30,4 +35,9 @@ public class TestInsertServiceImpl2 implements TestInsertService2 {
 		System.out.println("getEnCacheStr 要查库了"+id);
 		return testInsertEntityDao.getCacheStr();
 	}
+    
+    public void testKafka() {
+    	System.out.println("准备发送消息");
+    	kafkaTemplate.send("test3", "8745678");
+    }
 }
