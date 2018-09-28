@@ -173,6 +173,7 @@ public class TestProfile extends SpringbootJunitTest {
 	
 	/**
 	 * 测试缓存和发邮件
+	 * redis的分布式锁会出现，A先加锁后断开连接，A没法释放锁，直到过期时间才会删除key释放锁
 	 */
 	@Test
 	public void testRedisLock() {
@@ -273,14 +274,23 @@ public class TestProfile extends SpringbootJunitTest {
 		//smsService.sendSmsCode("18701365103");
 	}
 	
+	/**
+	 * Kafka发送消息，Kafka监听用监听器
+	 */
 	@Test
 	public void testKafka() {
 		System.out.println("准备测试队列发送消息");
 		testInsertService2.testKafka();
 	}
 	
+	/**
+	 * 测试zk分布式锁
+	 */
 	@Test
-	public void testKafka2(){
-		
+	public void testzk(){
+		logger.info("---开始测试zk分布式锁");
+    	for (int i = 0; i < 5; i++) {
+    		
+    	}
 	}
 }
