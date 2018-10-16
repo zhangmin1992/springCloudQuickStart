@@ -162,6 +162,19 @@ public class HelloController {
         return book2;
     }
     
+    /**
+     * hystrix测试一次性的批量请求的单个请求落实到的获取单个请求的方法
+     * 因为发送http请求获取的是字符串，因此这里要返回字符串形式
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/getBookInfoById",method = RequestMethod.GET)
+    public String getBook(long id) {
+    	Book book =  bookEntityDao.getBook(id);
+    	String bookJsonStr = JSONObject.toJSONString(book);
+    	return bookJsonStr;
+    }
+    
     @RequestMapping(value = "/postBook",method = RequestMethod.POST)
 	public Book postBook(@RequestBody Book book) {
     	logger.info("----- HelloController  postBook=" + JSONObject.toJSONString(book));
@@ -202,7 +215,6 @@ public class HelloController {
     @Transactional
     @RequestMapping(value="/testTransaction")
     public String testTransaction() {
-    	//吗
     	logger.info("----- HelloController testTransaction");
     	Pay pay = new Pay(1, "zm", 2, new Date());
     	Book book = new Book(1, "zm", 2, new Date());
